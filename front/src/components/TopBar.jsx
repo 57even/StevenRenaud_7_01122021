@@ -1,7 +1,8 @@
 import React from 'react';
 import { Fragment } from 'react'
 import logo from '../icons/icon-left-font.png'
-import menuLogo from '../icons/clipart1181112.png'
+// import menuLogo from '../icons/clipart1181112.png'
+import { ChevronDownIcon, SearchIcon } from '@heroicons/react/solid'
 import { Menu, Transition } from '@headlessui/react'
 
 function classNames(...classes) {
@@ -10,19 +11,23 @@ function classNames(...classes) {
 
 function TopBar() {
   return(
-    <header className="fixed inset-x-0 flex justify-between align-center self-center w-full bg-white p-2">
-      <a href="#">
-        <img src={logo} alt="Groupomania" className="object-cover max-h-10 max-w-1/4"/>
+    <header className="fixed inset-x-0 flex justify-between items-center self-center w-full bg-white py-1 px-4">
+      <a href="#" className="self-center">
+        <img src={logo} alt="Groupomania" className="object-cover max-h-9 max-w-1/4"/>
       </a>
-      <input type="search" placeholder="Rechercher" className="w-1/4 border rounded-md p-2"/>
-      <nav className="flex gap-2 align-center self-center">
+      <div className="p-1 flex items-center w-1/4 border rounded-md focus-within:border-primary focus-within:border-opacity-60 bg-gray-100">
+        <SearchIcon className="h-5 px-1"/>
+        <input type="search" placeholder="Rechercher" className="w-full p-1 focus:outline-none bg-gray-100"/>
+      </div>
+      <nav className="flex gap-2 items-center self-center">
         <a href="#" className="border-2 rounded-full p-1 pr-3 pl-3 m-0 border-primary hover:border-primary hover:bg-secondary font-bold text-primary">login</a>
         <a href="#" className="border-2 rounded-full p-1 pr-3 pl-3 m-0 border-primary hover:border-darker bg-primary hover:bg-darker text-white font-bold">Signup</a>
 
         <Menu as="div" className="relative inline-block">
           <div>
             <Menu.Button className="flex h-full justify-center w-full px-2 py-2 focus:outline-none">
-              <img src={menuLogo} alt="menu" className="mt-1 h-2.5" aria-hidden="true" />
+              {/* <img src={menuLogo} alt="menu" className="h-2.5" aria-hidden="true" /> */}
+              <ChevronDownIcon className="w-8"/>
             </Menu.Button>
           </div>
 
