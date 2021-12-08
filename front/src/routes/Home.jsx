@@ -2,7 +2,7 @@ import React from 'react';
 import TopBar from '../components/TopBar';
 import CardList from '../components/CardList'
 
-function Home() {
+export default function Home() {
   return (
     <React.Fragment>
       <TopBar />
@@ -10,5 +10,3 @@ function Home() {
     </React.Fragment>
   );
 }
-
-export default Home;

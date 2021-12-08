@@ -1,7 +1,7 @@
 import React from 'react';
 import { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 import logo from '../icons/icon-left-font.png'
-// import menuLogo from '../icons/clipart1181112.png'
 import { ChevronDownIcon, SearchIcon } from '@heroicons/react/solid'
 import { Menu, Transition } from '@headlessui/react'
 import profilePic from '../icons/profile_pic.png';
@@ -10,12 +10,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function TopBar() {
+export default function TopBar() {
   return(
     <header className="fixed z-50 inset-x-0 flex justify-between items-center self-center w-full bg-white py-1 px-4 border-b">
-      <a href="#" className="self-center">
+      <Link to="/" className="self-center">
         <img src={logo} alt="Groupomania" className="object-cover max-h-9 max-w-1/4"/>
-      </a>
+      </Link>
       <div className="p-1 flex items-center w-1/4 border rounded-md focus-within:border-primary focus-within:border-opacity-60 bg-gray-100">
         <SearchIcon className="h-5 px-1"/>
         <input type="search" placeholder="Rechercher" className="w-full p-0.5 focus:outline-none bg-gray-100"/>
@@ -105,5 +105,3 @@ function TopBar() {
     </header>
   );
 }
-
-export default TopBar;
