@@ -1,5 +1,6 @@
 import React from 'react';
 import profilePic from '../icons/profile_pic.png';
+import { Link } from 'react-router-dom'
 
 export default function ProfileForm() {
   return (
@@ -23,7 +24,7 @@ export default function ProfileForm() {
             <label for="password">Genre : Homme</label>
           </div>
         </div>
-        <button className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white">Modifier le Profil</button>
+        <Link to="./edit" className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white">Modifier le Profil</Link>
       </div>
     </main>
   );

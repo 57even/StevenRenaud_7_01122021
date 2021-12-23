@@ -45,15 +45,15 @@ export default function TopBar() {
               <div className="py-1">
                 <Menu.Item>
                   {({ active }) => (
-                    <a
-                      href="#"
+                    <Link
+                      to="/profile/846"
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                         'block px-4 py-2 text-sm'
                       )}
                     >
-                      Editer le Profil
-                    </a>
+                      Profil
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
