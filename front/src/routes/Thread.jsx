@@ -1,6 +1,7 @@
 import React from 'react';
 import TopBar from '../components/TopBar';
 import FirstPost from '../components/FirstPost';
+import CommentList from '../components/CommentList';
 import { Outlet } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
@@ -9,8 +10,11 @@ export default function Thread() {
   return (
     <React.Fragment>
       <TopBar />
-      <FirstPost />
-      <Outlet />
+      <main>
+        <FirstPost />
+        <CommentList />
+        <Outlet />
+      </main>
     </React.Fragment>
   );
 }

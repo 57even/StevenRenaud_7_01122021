@@ -3,7 +3,7 @@ import profilePic from '../icons/profile_pic.png';
 
 export default function FirstPost() {
   return(
-    <main className="flex flex-col justify-center items-center py-8 p-3">
+    <main className="flex flex-col justify-center items-center pt-8 p-3 pb-0">
       <section className="w-full m-5 flex flex-col items-center justify-center gap-2">
         <div className="flex flex-col items-start rounded-md bg-white w-45rem border">
           <div className="flex gap-1.5 items-center pl-2.5 pt-1.5 text-sm">

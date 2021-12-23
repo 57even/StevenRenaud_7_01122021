@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import Home from "./routes/Home";
 import Thread from "./routes/Thread";
+import Login from "./routes/Login";
+import Signup from "./routes/Signup";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -17,6 +19,8 @@ render(
         <Route path="thread">
           <Route path=":threadId" element={<Thread />} />
         </Route>
+      <Route path="login" element={<Login />} />
+      <Route path="Signup" element={<Signup />} />
       <Route
         path="*"
         element={

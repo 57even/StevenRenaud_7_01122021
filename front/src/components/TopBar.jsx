@@ -21,8 +21,8 @@ export default function TopBar() {
         <input type="search" placeholder="Rechercher" className="w-full p-0.5 focus:outline-none bg-gray-100"/>
       </div>
       <nav className="flex gap-2 items-center self-center">
-        <a href="#" className="border-2 rounded-full p-1 pr-3 pl-3 m-0 border-primary hover:border-primary hover:bg-secondary font-bold text-primary">Connexion</a>
-        <a href="#" className="border-2 rounded-full p-1 pr-3 pl-3 m-0 border-primary hover:border-darker bg-primary hover:bg-darker text-white font-bold">Inscription</a>
+        <Link to="/login" className="border-2 rounded-full p-1 pr-3 pl-3 m-0 border-primary hover:border-primary hover:bg-secondary font-bold text-primary">Connexion</Link>
+        <Link to="/signup" className="border-2 rounded-full p-1 pr-3 pl-3 m-0 border-primary hover:border-darker bg-primary hover:bg-darker text-white font-bold">Inscription</Link>
 
         <Menu as="div" className="relative inline-block">
           <div className="border rounded-3xl px-0.5 py-0.5">
