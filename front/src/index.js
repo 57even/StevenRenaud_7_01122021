@@ -8,6 +8,7 @@ import Home from "./routes/Home";
 import Thread from "./routes/Thread";
 import Login from "./routes/Login";
 import Signup from "./routes/Signup";
+import Profile from "./routes/Profile";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -21,6 +22,7 @@ render(
         </Route>
       <Route path="login" element={<Login />} />
       <Route path="Signup" element={<Signup />} />
+      <Route path="Profile" element={<Profile />} />
       <Route
         path="*"
         element={
