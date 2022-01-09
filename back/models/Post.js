@@ -8,25 +8,20 @@ class Post {
   }
 
   save() {
-    let d = new Date();
-    let dd = d.getDate();
-    let mm = d.getMonth() + 1;
-    let yyyy = d.getFullYear();
-
-    let createdAtDate = `${dd}-${mm}-${yyyy}`;
+    let date = new Date();
 
     let sql = `
       INSERT INTO posts(
         author,
         title,
         body,
-        created_at
+        date
       )
       VALUES(
         '${this.author}',
         '${this.title}',
         '${this.body}',
-        '${createdAtDate}'
+        '${date}'
       )
     `;
 

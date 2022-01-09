@@ -7,8 +7,9 @@ import {
 } from "@heroicons/react/outline";
 import profilePic from "../icons/profile_pic.png";
 import { Link } from "react-router-dom";
+import TimeAgo from "react-timeago";
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, formatter }) {
   return (
     <div className="flex flex-col items-start rounded-md bg-white w-45rem border">
       <div className="flex gap-1.5 items-center pl-2.5 pt-1.5 text-sm">
@@ -21,14 +22,14 @@ export default function PostCard({ post }) {
         </a>
         <span>
           <a href="#" className="font-bold">
-            John Doe
+            {post.author}
           </a>
-          , {post.created_at}
+          , <TimeAgo date={post.date} formatter={formatter} />
         </span>
       </div>
       <Link
-        to="/thread/324"
-        key="324"
+        to={`/posts/${post.id}`}
+        key={post.id}
         className="relative flex flex-col-reverse flex-wrap p-2.5 pt-0 max-h-52 overflow-hidden"
       >
         <div className="max-h-full overflow-hidden">
@@ -47,7 +48,8 @@ export default function PostCard({ post }) {
           <span className="">5</span>
         </button>
         <Link
-          to="/thread/324"
+          to={`/posts/${post.id}`}
+          key={post.id}
           className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer"
         >
           <AnnotationIcon className="h-6" />
