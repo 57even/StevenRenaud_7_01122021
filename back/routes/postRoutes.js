@@ -9,4 +9,9 @@ router
 
 router.route("/posts/:id").get(postControllers.getPostById);
 
+router
+  .route("/posts/:id/comments")
+  .get(postControllers.getAllComments)
+  .post(postControllers.createNewComment);
+
 module.exports = router;

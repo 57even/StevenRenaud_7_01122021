@@ -30,7 +30,6 @@ export default function Thread({ formatter }) {
     <React.Fragment>
       <TopBar />
       <main>
-        {console.log(post)}
         <FirstPost key={post.id} post={post} formatter={formatter} />
         <CommentList formatter={formatter} />
         <Outlet />

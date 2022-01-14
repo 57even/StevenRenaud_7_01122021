@@ -2,12 +2,25 @@ const {
   default: strictTransportSecurity,
 } = require("helmet/dist/middlewares/strict-transport-security");
 const Post = require("../models/Post");
+const Comment = require("../models/Comment");
 
 exports.getAllPosts = async (req, res, next) => {
   try {
-    const [posts, _] = await Post.findAll();
+    let [posts, _] = await Post.findAll();
 
     res.status(200).json({ posts });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.getAllComments = async (req, res, next) => {
+  try {
+    let postId = req.params.id;
+    let [comments, _] = await Comment.findAll(postId);
+
+    res.status(200).json({ comments });
   } catch (error) {
     console.log(error);
     next(error);
@@ -28,10 +41,25 @@ exports.createNewPost = async (req, res, next) => {
   }
 };
 
+exports.createNewComment = async (req, res, next) => {
+  try {
+    let postId = req.params.id;
+    let { author, body } = req.body;
+    let comment = new Comment(postId, author, body);
+
+    comment = await comment.save();
+
+    res.status(201).json({ message: "Comment created successfully." });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 exports.getPostById = async (req, res, next) => {
   try {
-    let postID = req.params.id;
-    let [post, _] = await Post.findById(postID);
+    let postId = req.params.id;
+    let [post, _] = await Post.findById(postId);
 
     res.status(200).json({ post: post[0] });
   } catch (error) {
