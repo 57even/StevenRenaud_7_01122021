@@ -1,10 +1,10 @@
 const db = require("../config/db");
 
 class Post {
-  constructor(author, title, body) {
+  constructor(author, title, text) {
     this.author = author;
     this.title = title;
-    this.body = body;
+    this.text = text;
   }
 
   save() {
@@ -14,13 +14,13 @@ class Post {
       INSERT INTO posts(
         author,
         title,
-        body,
+        text,
         date
       )
       VALUES(
         '${this.author}',
         '${this.title}',
-        '${this.body}',
+        '${this.text}',
         '${date}'
       )
     `;

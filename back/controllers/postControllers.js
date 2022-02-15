@@ -29,8 +29,8 @@ exports.getAllComments = async (req, res, next) => {
 
 exports.createNewPost = async (req, res, next) => {
   try {
-    let { author, title, body } = req.body;
-    let post = new Post(author, title, body);
+    let { author, title, text } = req.body;
+    let post = new Post(author, title, text);
 
     post = await post.save();
 
@@ -44,8 +44,8 @@ exports.createNewPost = async (req, res, next) => {
 exports.createNewComment = async (req, res, next) => {
   try {
     let postId = req.params.id;
-    let { author, body } = req.body;
-    let comment = new Comment(postId, author, body);
+    let { author, text } = req.body;
+    let comment = new Comment(postId, author, text);
 
     comment = await comment.save();
 

@@ -20,7 +20,7 @@ export default function Comment({ comment, formatter }) {
           , <TimeAgo date={comment.date} formatter={formatter} />
         </span>
       </div>
-      <h1 className="ml-10 -mt-1.5">{comment.body}</h1>
+      <h1 className="ml-10 -mt-1.5">{comment.text}</h1>
     </div>
   );
 }

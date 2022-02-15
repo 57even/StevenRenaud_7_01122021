@@ -29,7 +29,7 @@ export default function FirstPost({ post, formatter }) {
           <div className="relative flex flex-col-reverse flex-wrap p-2.5 pt-0 overflow-hidden">
             <div className="max-h-full overflow-hidden">
               <h1 className="font-bold text-lg">{post.title}</h1>
-              <p>{post.body}</p>
+              <p>{post.text}</p>
             </div>
           </div>
           <div className="flex m-2.5 mt-1 gap-2">

@@ -34,7 +34,7 @@ export default function PostCard({ post, formatter }) {
       >
         <div className="max-h-full overflow-hidden">
           <h3 className="font-bold text-lg">{post.title}</h3>
-          <p>{post.body}</p>
+          <p>{post.text}</p>
         </div>
         <div className="background"></div>
       </Link>

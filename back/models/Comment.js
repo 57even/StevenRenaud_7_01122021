@@ -1,10 +1,10 @@
 const db = require("../config/db");
 
 class Comment {
-  constructor(postId, author, body) {
+  constructor(postId, author, text) {
     this.postId = postId;
     this.author = author;
-    this.body = body;
+    this.text = text;
   }
 
   save() {
@@ -14,13 +14,13 @@ class Comment {
       INSERT INTO comments(
         postId,
         author,
-        body,
+        text,
         date
       )
       VALUES(
         ${this.postId},
         '${this.author}',
-        '${this.body}',
+        '${this.text}',
         '${date}'
       )
     `;

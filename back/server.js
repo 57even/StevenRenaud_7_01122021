@@ -10,6 +10,8 @@ app.use(cors());
 
 app.use("/", require("./routes/postRoutes"));
 
+app.use("/auth/", require("./routes/userRoutes"));
+
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.log(err.stack);

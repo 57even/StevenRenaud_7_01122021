@@ -1,21 +1,112 @@
-import React from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
+
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+    setSubmitted(false);
+  };
+
+  const handlePwd = (e) => {
+    setPwd(e.target.value);
+    setSubmitted(false);
+  };
+
+  // Handling the form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (email === "" || pwd === "") {
+      setError(true);
+    } else {
+      (async () => {
+        let request = await axios.post("http://localhost:3000/auth/login", {
+          email,
+          pwd,
+        });
+        localStorage.setItem("token", JSON.stringify(request.data));
+
+        setSubmitted(true);
+        setError(false);
+        navigate("/");
+      })();
+    }
+  };
+
+  // Showing success message
+  const successMessage = () => {
+    return (
+      <div
+        className="success"
+        style={{
+          display: submitted ? "" : "none",
+        }}
+      >
+        <h1>Connexion en cours</h1>
+      </div>
+    );
+  };
+
+  // Showing error message if error is true
+  const errorMessage = () => {
+    return (
+      <div
+        className="error"
+        style={{
+          display: error ? "" : "none",
+        }}
+      >
+        <h1 className="text-center">Au moins un des champs est incorrect</h1>
+      </div>
+    );
+  };
+
   return (
     <main className="flex flex-col items-center py-32">
       <div className="flex flex-col items-center bg-white p-5 rounded-md border">
-        <h1 className="w-24 m-2 border-b mb-3 text-center text-lg">Connexion</h1>
-        <div className="flex flex-col gap-2 m-2">
+        <h1 className="w-24 m-2 border-b mb-3 text-center text-lg">
+          Connexion
+        </h1>
+        <div className="messages">
+          {errorMessage()}
+          {successMessage()}
+        </div>
+        <form className="flex flex-col gap-2 m-2">
           <div className="flex flex-col items-center">
             <label for="email">Email :</label>
-            <input className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1" type="text" id="email" name="email" required minlength="4" maxlength="8" size="10" />
+            <input
+              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              onChange={handleEmail}
+              value={email}
+              type="text"
+              name="email"
+            />
           </div>
           <div className="flex flex-col items-center">
-            <label for="password">Mot de Passe :</label>
-            <input className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1" type="text" id="password" name="password" required minlength="4" maxlength="8" size="10" />
+            <label for="pwd">Mot de Passe :</label>
+            <input
+              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              onChange={handlePwd}
+              value={pwd}
+              type="password"
+              name="pwd"
+            />
           </div>
-        </div>
-        <button className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white">Se Connecter</button>
+          <button
+            onClick={handleSubmit}
+            type="submit"
+            className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white"
+          >
+            Se Connecter
+          </button>
+        </form>
       </div>
     </main>
   );

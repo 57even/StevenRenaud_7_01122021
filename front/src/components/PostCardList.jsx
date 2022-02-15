@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PostCard from "./PostCard";
+import CreatePostCard from "../components/CreatePostCard";
 import axios from "axios";
 
 export default function PostCardList({ formatter }) {
@@ -23,11 +24,12 @@ export default function PostCardList({ formatter }) {
   }
   return (
     <main className="flex flex-col justify-center items-center py-8 p-3">
-      <section className="w-full m-5 flex flex-col items-center justify-center gap-2">
+      <div className="w-full m-5 flex flex-col items-center justify-center gap-2">
+        <CreatePostCard />
         {posts.reverse().map((post) => {
           return <PostCard key={post.id} post={post} formatter={formatter} />;
         })}
-      </section>
+      </div>
     </main>
   );
 }
