@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   ThumbUpIcon,
   ThumbDownIcon,
@@ -7,6 +9,28 @@ import profilePic from "../icons/profile_pic.png";
 import TimeAgo from "react-timeago";
 
 export default function FirstPost({ post, formatter }) {
+  const [commentsCount, setCommentsCount] = useState(0);
+  const [authorName, setAuthorName] = useState();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/posts/${post.id}/comments`)
+      .then((res) => {
+        setCommentsCount(res.data.comments.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get(`http://localhost:3000/auth/${post.author}`)
+      .then((res) => {
+        setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [post.id, post.author]);
+
   return (
     <main className="flex flex-col justify-center items-center pt-8 p-3 pb-0">
       <section className="w-full m-5 flex flex-col items-center justify-center gap-2">
@@ -21,7 +45,7 @@ export default function FirstPost({ post, formatter }) {
             </a>
             <span>
               <a href="#" className="font-bold">
-                {post.author}
+                {authorName}
               </a>
               , <TimeAgo date={post.date} formatter={formatter} />
             </span>
@@ -43,7 +67,7 @@ export default function FirstPost({ post, formatter }) {
             </button>
             <div className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700">
               <AnnotationIcon className="h-6" />
-              <span className="">8</span>
+              <span className="">{commentsCount}</span>
             </div>
           </div>
         </div>

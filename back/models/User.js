@@ -35,9 +35,9 @@ class User {
 
   static findOne(param) {
     let sql = `SELECT * FROM users WHERE id = ${param};`;
-    if (param.includes("@")) {
-      sql = `SELECT * FROM users WHERE email = '${param}';`;
-    }
+    // if (param.includes("@")) {
+    //   sql = `SELECT * FROM users WHERE email = '${param}';`;
+    // }
 
     return db.execute(sql);
   }
