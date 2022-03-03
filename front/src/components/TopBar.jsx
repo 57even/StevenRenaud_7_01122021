@@ -14,24 +14,32 @@ function classNames(...classes) {
 export default function TopBar() {
   let logButtons = "";
   let [userName, setUserName] = useState("");
+  let [userId, setUserId] = useState("");
+  let authHide = "hidden";
   let [auth, setAuth] = useState();
   useEffect(() => {
     (async () => {
       if (JSON.parse(localStorage.getItem("token"))) {
-        let token = JSON.parse(localStorage.getItem("token")).token;
-        let userId = JSON.parse(localStorage.getItem("token")).userId;
+        try {
+          let token = JSON.parse(localStorage.getItem("token")).token;
+          let userId = JSON.parse(localStorage.getItem("token")).userId;
 
-        const res = await axios.post(
-          "http://localhost:3000/auth/",
-          { userId },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setAuth(res.data.auth);
+          const res = await axios.post(
+            "http://localhost:3000/auth/",
+            { userId },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setAuth(res.data.auth);
+          setUserId(userId);
 
-        const res1 = await axios.get(`http://localhost:3000/auth/${userId}`);
-        let firstName = res1.data.user.firstName;
-        let lastName = res1.data.user.lastName;
-        setUserName(`${firstName} ${lastName}`);
+          const res1 = await axios.get(`http://localhost:3000/auth/${userId}`);
+          let firstName = res1.data.user.firstName;
+          let lastName = res1.data.user.lastName;
+          setUserName(`${firstName} ${lastName}`);
+        } catch (error) {
+          console.log(error);
+          localStorage.removeItem("token");
+        }
       } else {
         setAuth(false);
         setUserName("");
@@ -58,6 +66,7 @@ export default function TopBar() {
     );
   } else if (auth === true && logButtons.length !== "") {
     logButtons = "";
+    authHide = "";
   }
 
   const disconnect = () => {
@@ -114,9 +123,11 @@ export default function TopBar() {
                 <Menu.Item>
                   {({ active }) => (
                     <Link
-                      to="/profile/846"
+                      to={`/profile/${userId}`}
                       className={classNames(
-                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                        active
+                          ? "bg-gray-100 text-gray-900"
+                          : `${authHide} text-gray-700`,
                         "block px-4 py-2 text-sm"
                       )}
                     >
@@ -159,7 +170,7 @@ export default function TopBar() {
                         className={classNames(
                           active
                             ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
+                            : `${authHide} text-gray-700`,
                           "block w-full text-left px-4 py-2 text-sm"
                         )}
                       >

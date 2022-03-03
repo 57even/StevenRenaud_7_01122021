@@ -33,6 +33,18 @@ class Comment {
 
     return db.execute(sql);
   }
+
+  static modifyById(id, text) {
+    let sql = `UPDATE comments SET text = '${text}' WHERE id = ${id};`;
+
+    return db.execute(sql);
+  }
+
+  static deleteById(id) {
+    let sql = `DELETE FROM comments where id = ${id}`;
+
+    return db.execute(sql);
+  }
 }
 
 module.exports = Comment;

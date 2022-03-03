@@ -21,6 +21,46 @@ exports.authCheck = async (req, res, next) => {
   }
 };
 
+exports.modifyUser = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const validEmail =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const validPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (!validEmail.test(req.body.email)) throw "Email non valide";
+    // if (!validPasswd.test(req.body.pwd))
+    //   throw "Le mot de passe doit contenir au moins 8 caractères dont 1 majuscule, une minuscule et un chiffre";
+
+    let pwd = await bcrypt.hash(req.body.pwd, 10);
+    let newPwd;
+    if (req.body.newPwd) {
+      newPwd = await bcrypt.hash(req.body.newPwd, 10);
+    } else {
+      newPwd = pwd;
+    }
+    let { firstName, lastName, email, birthday, gender } = req.body;
+    let [user, _] = await User.findOne(email);
+
+    if (await bcrypt.compare(req.body.pwd, user[0].pwd)) {
+      pwd = newPwd;
+      await User.modifyOne(
+        userId,
+        firstName,
+        lastName,
+        email,
+        pwd,
+        birthday,
+        gender
+      );
+    }
+
+    res.status(201).json({ message: "Utilisateur modifié avec succès" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 exports.getUser = async (req, res, next) => {
   try {
     let userId = req.params.id;

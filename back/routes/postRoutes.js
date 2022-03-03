@@ -8,11 +8,20 @@ router
   .get(postControllers.getAllPosts)
   .post(auth, postControllers.createNewPost);
 
-router.route("/posts/:id").get(postControllers.getPostById);
+router
+  .route("/posts/:id")
+  .get(postControllers.getPostById)
+  .put(auth, postControllers.modifyPost)
+  .delete(auth, postControllers.deletePost);
 
 router
   .route("/posts/:id/comments")
   .get(postControllers.getAllComments)
   .post(auth, postControllers.createNewComment);
+
+router
+  .route("/comments/:id")
+  .put(auth, postControllers.modifyComment)
+  .delete(auth, postControllers.deleteComment);
 
 module.exports = router;

@@ -24,7 +24,7 @@ render(
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
       <Route path="profile">
-        <Route path=":profileId" element={<Profile />} />
+        <Route path=":userId" element={<Profile />} />
       </Route>
       <Route path="profile/:profileId/edit" element={<EditProfile />} />
       <Route

@@ -36,17 +36,25 @@ export default function PostCard({ post, formatter }) {
   return (
     <div className="flex flex-col items-start rounded-md bg-white w-45rem border">
       <div className="flex gap-1.5 items-center pl-2.5 pt-1.5 text-sm">
-        <a href="#" className="rounded-full">
+        <Link
+          to={`/profile/${post.author}`}
+          key={post.author}
+          className="rounded-full"
+        >
           <img
             src={profilePic}
             alt="Avatar"
             className="h-8 w-8 object-cover rounded-full"
           />
-        </a>
+        </Link>
         <span>
-          <a href="#" className="font-bold">
+          <Link
+            to={`/profile/${post.author}`}
+            key={post.author}
+            className="font-bold"
+          >
             {authorName}
-          </a>
+          </Link>
           , <TimeAgo date={post.date} formatter={formatter} />
         </span>
       </div>

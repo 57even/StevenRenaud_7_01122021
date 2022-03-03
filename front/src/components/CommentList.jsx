@@ -7,6 +7,7 @@ import CreateCommentCard from "./CreateCommentCard";
 export default function CommentList({ formatter }) {
   const [comments, setComments] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [isEditComment, setIsEditComment] = useState(false);
   let { postId } = useParams();
 
   useEffect(() => {
