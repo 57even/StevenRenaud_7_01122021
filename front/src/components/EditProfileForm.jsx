@@ -80,7 +80,7 @@ export default function EditProfileForm() {
 
         let token = JSON.parse(localStorage.getItem("token")).token;
         await axios.put(
-          `http://localhost:3000/auth/${profileId}`,
+          `http://localhost:3000/users/${profileId}`,
           {
             firstName,
             lastName,
@@ -130,7 +130,7 @@ export default function EditProfileForm() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/auth/${profileId}`)
+      .get(`http://localhost:3000/users/${profileId}`)
       .then((res) => {
         setFirstName(res.data.user.firstName);
         setLastName(res.data.user.lastName);

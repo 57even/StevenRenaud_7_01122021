@@ -11,37 +11,57 @@ class Comment {
     let date = new Date();
 
     let sql = `
-      INSERT INTO comments(
-        postId,
+      INSERT INTO comments${this.postId}(
         author,
         text,
         date
       )
       VALUES(
-        ${this.postId},
         '${this.author}',
         '${this.text}',
         '${date}'
       )
     `;
 
+    db.execute(
+      `UPDATE posts SET commentCount = commentCount + 1 WHERE id = ${this.postId}`
+    );
+
+    return db.execute(sql);
+  }
+
+  static createTable(postId) {
+    let sql = `CREATE TABLE comments${postId} (
+      id int auto_increment,
+      postId int,
+      author int,
+      text varchar(10000),
+      date varchar(100),
+      PRIMARY KEY (id),
+      FOREIGN KEY (postId) REFERENCES posts(id)
+    )`;
+
     return db.execute(sql);
   }
 
   static findAll(postId) {
-    let sql = `SELECT * FROM comments WHERE postId = '${postId}';`;
+    let sql = `SELECT * FROM comments${postId}`;
 
     return db.execute(sql);
   }
 
-  static modifyById(id, text) {
-    let sql = `UPDATE comments SET text = '${text}' WHERE id = ${id};`;
+  static modifyById(postId, id, text) {
+    let sql = `UPDATE comments${postId} SET text = '${text}' WHERE id = ${id}`;
 
     return db.execute(sql);
   }
 
-  static deleteById(id) {
-    let sql = `DELETE FROM comments where id = ${id}`;
+  static deleteById(postId, id) {
+    let sql = `DELETE FROM comments${postId} where id = ${id}`;
+
+    db.execute(
+      `UPDATE posts SET commentCount = commentCount - 1 WHERE id = ${postId}`
+    );
 
     return db.execute(sql);
   }

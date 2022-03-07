@@ -46,11 +46,19 @@ class Post {
     return db.execute(sql);
   }
 
-  static deleteById(id) {
-    let sql0 = `DELETE FROM comments where postId = ${id}`;
+  static modifyLikeCount(id, likeCount, dislikeCount) {
+    let sql = `UPDATE posts SET likeCount = likeCount + ${likeCount}, dislikeCount = dislikeCount + ${dislikeCount} WHERE id = ${id};`;
+
+    return db.execute(sql);
+  }
+
+  static deleteById(id, commentCount) {
+    if (commentCount) {
+      db.execute(`DROP TABLE comments${id}`);
+    }
+
     let sql = `DELETE FROM posts WHERE id = ${id};`;
 
-    db.execute(sql0);
     return db.execute(sql);
   }
 }

@@ -25,14 +25,14 @@ export default function TopBar() {
           let userId = JSON.parse(localStorage.getItem("token")).userId;
 
           const res = await axios.post(
-            "http://localhost:3000/auth/",
+            "http://localhost:3000/users/auth",
             { userId },
             { headers: { Authorization: `Bearer ${token}` } }
           );
           setAuth(res.data.auth);
           setUserId(userId);
 
-          const res1 = await axios.get(`http://localhost:3000/auth/${userId}`);
+          const res1 = await axios.get(`http://localhost:3000/users/${userId}`);
           let firstName = res1.data.user.firstName;
           let lastName = res1.data.user.lastName;
           setUserName(`${firstName} ${lastName}`);

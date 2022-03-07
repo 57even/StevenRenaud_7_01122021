@@ -11,27 +11,111 @@ import TimeAgo from "react-timeago";
 import axios from "axios";
 
 export default function PostCard({ post, formatter }) {
-  const [commentsCount, setCommentsCount] = useState(0);
-  const [authorName, setAuthorName] = useState();
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/posts/${post.id}/comments`)
-      .then((res) => {
-        setCommentsCount(res.data.comments.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  let token;
+  let userId;
+  if (JSON.parse(localStorage.getItem("token"))) {
+    token = JSON.parse(localStorage.getItem("token")).token;
+    userId = JSON.parse(localStorage.getItem("token")).userId;
+  }
 
-    axios
-      .get(`http://localhost:3000/auth/${post.author}`)
-      .then((res) => {
+  const [authorName, setAuthorName] = useState();
+  let [isLike, setIsLike] = useState(0);
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/users/${post.author}`
+        );
+
         setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [post.id, post.author]);
+
+        if (userId && post.likeCount + post.dislikeCount > 0) {
+          const res1 = await axios.get(
+            `http://localhost:3000/likes/${post.id}/${userId}`
+          );
+          if (Object.keys(res1.data)[0] === "like") {
+            setIsLike(res1.data.like.likeValue);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [post.id, post.author, userId, post.likeCount, post.dislikeCount]);
+
+  const [likeCount, setLikeCount] = useState(post.likeCount);
+  let likeColor = "";
+  if (isLike === 1) {
+    likeColor = "text-blue-500";
+  }
+  const [dislikeCount, setDislikeCount] = useState(post.dislikeCount);
+  let dislikeColor = "";
+  if (isLike === -1) {
+    dislikeColor = "text-red-500";
+  }
+
+  const handleLikeCount = (value) => {
+    setLikeCount(likeCount + value);
+    likeColor = "text-blue-500";
+  };
+  const handleDislikeCount = (value) => {
+    setDislikeCount(dislikeCount + value);
+    dislikeColor = "text-red-500";
+  };
+
+  const handleLike = async () => {
+    let postId = post.id;
+    let likeValue = 1;
+    await axios.post(
+      `http://localhost:3000/likes/${post.id}`,
+      {
+        postId,
+        userId,
+        likeValue,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (isLike !== 1) {
+      handleLikeCount(1);
+      if (isLike === -1) handleDislikeCount(-1);
+      likeColor = "text-blue-500";
+      dislikeColor = "";
+      setIsLike(1);
+    } else if (isLike === 1) {
+      handleLikeCount(-1);
+      likeColor = "";
+      setIsLike(0);
+    }
+  };
+
+  const handleDislike = async () => {
+    let postId = post.id;
+    let likeValue = -1;
+    await axios.post(
+      `http://localhost:3000/likes/${post.id}`,
+      {
+        postId,
+        userId,
+        likeValue,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (isLike !== -1) {
+      handleDislikeCount(1);
+      if (isLike === 1) handleLikeCount(-1);
+      dislikeColor = "text-red-500";
+      likeColor = "";
+      setIsLike(-1);
+    } else if (isLike === -1) {
+      handleDislikeCount(-1);
+      dislikeColor = "";
+      setIsLike(0);
+    }
+  };
 
   return (
     <div className="flex flex-col items-start rounded-md bg-white w-45rem border">
@@ -70,13 +154,19 @@ export default function PostCard({ post, formatter }) {
         <div className="background"></div>
       </Link>
       <div className="flex m-2.5 mt-1 gap-2">
-        <button className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer">
-          <ThumbUpIcon className="h-6" />
-          <span className="">23</span>
+        <button
+          className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer"
+          onClick={handleLike}
+        >
+          <ThumbUpIcon className={`h-6 ${likeColor}`} />
+          <span className="">{likeCount}</span>
         </button>
-        <button className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer">
-          <ThumbDownIcon className="h-6" />
-          <span className="">5</span>
+        <button
+          className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer"
+          onClick={handleDislike}
+        >
+          <ThumbDownIcon className={`h-6 ${dislikeColor}`} />
+          <span className="">{dislikeCount}</span>
         </button>
         <Link
           to={`/posts/${post.id}`}
@@ -84,7 +174,7 @@ export default function PostCard({ post, formatter }) {
           className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer"
         >
           <AnnotationIcon className="h-6" />
-          <span className="">{commentsCount}</span>
+          <span className="">{post.commentCount}</span>
         </Link>
       </div>
     </div>

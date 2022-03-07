@@ -19,7 +19,7 @@ export default function ProfileForm() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/auth/${userId}`)
+      .get(`http://localhost:3000/users/${userId}`)
       .then((res) => {
         setFirstName(res.data.user.firstName);
         setLastName(res.data.user.lastName);

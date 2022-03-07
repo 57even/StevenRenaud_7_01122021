@@ -27,7 +27,7 @@ export default function LoginForm() {
       setError(true);
     } else {
       (async () => {
-        let request = await axios.post("http://localhost:3000/auth/login", {
+        let request = await axios.post("http://localhost:3000/users/login", {
           email,
           pwd,
         });
@@ -80,7 +80,7 @@ export default function LoginForm() {
         </div>
         <form className="flex flex-col gap-2 m-2">
           <div className="flex flex-col items-center">
-            <label for="email">Email :</label>
+            <label forhtml="email">Email :</label>
             <input
               className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleEmail}
@@ -90,7 +90,7 @@ export default function LoginForm() {
             />
           </div>
           <div className="flex flex-col items-center">
-            <label for="pwd">Mot de Passe :</label>
+            <label forhtml="pwd">Mot de Passe :</label>
             <input
               className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handlePwd}

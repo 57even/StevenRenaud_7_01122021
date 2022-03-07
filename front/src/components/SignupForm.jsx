@@ -63,7 +63,7 @@ export default function SignupForm() {
       setError(true);
     } else {
       (async () => {
-        await axios.post("http://localhost:3000/auth/signup", {
+        await axios.post("http://localhost:3000/users/signup", {
           firstName,
           lastName,
           email,

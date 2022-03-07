@@ -4,27 +4,25 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import CreateCommentCard from "./CreateCommentCard";
 
-export default function CommentList({ formatter }) {
+export default function CommentList({ formatter, commentCount }) {
   const [comments, setComments] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  const [isEditComment, setIsEditComment] = useState(false);
   let { postId } = useParams();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/posts/${postId}/comments`)
-      .then((res) => {
-        setComments(res.data.comments);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [postId]);
+    (async () => {
+      try {
+        if (commentCount !== 0) {
+          const res = await axios.get(
+            `http://localhost:3000/posts/${postId}/comments`
+          );
+          setComments(res.data.comments);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [commentCount, postId]);
 
-  if (isLoading) {
-    return <>Loading...</>;
-  }
   return (
     <section className="flex flex-col items-center -mt-5 mb-2">
       <div className="flex flex-col items-center gap-2.5 w-45rem rounded-md border bg-white">

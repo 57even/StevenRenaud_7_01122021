@@ -3,10 +3,8 @@ import axios from "axios";
 
 export default function EditPost({ post, setIsEdit }) {
   let token;
-  let author;
   if (JSON.parse(localStorage.getItem("token"))) {
     token = JSON.parse(localStorage.getItem("token")).token;
-    author = JSON.parse(localStorage.getItem("token")).userId;
   }
   const [title, setTitle] = useState(post.title);
   const [text, setText] = useState(post.text);

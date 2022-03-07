@@ -48,7 +48,7 @@ export default function Thread({ formatter }) {
               setIsEdit={setIsEdit}
             />
           )}
-          <CommentList formatter={formatter} />
+          <CommentList formatter={formatter} commentCount={post.commentCount} />
           <Outlet />
         </div>
       </main>

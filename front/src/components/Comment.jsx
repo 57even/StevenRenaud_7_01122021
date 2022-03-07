@@ -4,8 +4,11 @@ import { PencilAltIcon, XCircleIcon } from "@heroicons/react/outline";
 import profilePic from "../icons/profile_pic.png";
 import TimeAgo from "react-timeago";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function Comment({ comment, formatter }) {
+  const { postId } = useParams();
+  const commentId = comment.id;
   const [isEdit, setIsEdit] = useState(false);
   const [text, setText] = useState(comment.text);
   const handleText = (e) => {
@@ -22,7 +25,7 @@ export default function Comment({ comment, formatter }) {
   const [authorName, setAuthorName] = useState();
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/auth/${comment.author}`)
+      .get(`http://localhost:3000/users/${comment.author}`)
       .then((res) => {
         setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
       })
@@ -32,7 +35,8 @@ export default function Comment({ comment, formatter }) {
   }, [comment.author]);
 
   const handleDelete = async () => {
-    await axios.delete(`http://localhost:3000/comments/${comment.id}`, {
+    await axios.delete(`http://localhost:3000/posts/${postId}/comments`, {
+      data: { commentId },
       headers: { Authorization: `Bearer ${token}` },
     });
     window.location.reload();
@@ -51,8 +55,9 @@ export default function Comment({ comment, formatter }) {
     if (text !== "") {
       let userId = JSON.parse(localStorage.getItem("token")).userId;
       await axios.put(
-        `http://localhost:3000/comments/${comment.id}`,
+        `http://localhost:3000/posts/${postId}/comments`,
         {
+          commentId,
           userId,
           text,
         },

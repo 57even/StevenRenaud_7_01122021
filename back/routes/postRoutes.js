@@ -14,13 +14,14 @@ router
   .put(auth, postControllers.modifyPost)
   .delete(auth, postControllers.deletePost);
 
+router.route("/likes/:id").post(auth, postControllers.createNewLike);
+
+router.route("/likes/:id/:userId").get(postControllers.getLikeById);
+
 router
   .route("/posts/:id/comments")
   .get(postControllers.getAllComments)
-  .post(auth, postControllers.createNewComment);
-
-router
-  .route("/comments/:id")
+  .post(auth, postControllers.createNewComment)
   .put(auth, postControllers.modifyComment)
   .delete(auth, postControllers.deleteComment);
 
