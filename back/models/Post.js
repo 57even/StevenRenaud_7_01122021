@@ -35,7 +35,15 @@ class Post {
   }
 
   static findById(id) {
-    let sql = `SELECT * FROM posts WHERE id = ${id};`;
+    let sql;
+    console.log(id);
+    if (!Number(id)) {
+      console.log("ok");
+      sql = `SELECT * FROM posts WHERE title LIKE '%${id}%' OR text LIKE '%${id}%';`;
+    } else {
+      console.log("nok");
+      sql = `SELECT * FROM posts WHERE id = '${id}';`;
+    }
 
     return db.execute(sql);
   }

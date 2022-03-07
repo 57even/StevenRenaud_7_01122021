@@ -11,7 +11,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function TopBar() {
+export default function TopBar({ setSearchFilter }) {
   let logButtons = "";
   let [userName, setUserName] = useState("");
   let [userId, setUserId] = useState("");
@@ -76,6 +76,10 @@ export default function TopBar() {
     }
   };
 
+  let handleSearch = (e) => {
+    setSearchFilter(e.target.value);
+  };
+
   return (
     <header className="fixed z-50 inset-x-0 flex justify-between items-center self-center w-full bg-white py-1 px-4 border-b">
       <Link to="/" className="self-center">
@@ -91,6 +95,7 @@ export default function TopBar() {
           type="search"
           placeholder="Rechercher"
           className="w-full p-0.5 focus:outline-none bg-gray-100"
+          onChange={handleSearch}
         />
       </div>
       <nav className="flex gap-2 items-center self-center">

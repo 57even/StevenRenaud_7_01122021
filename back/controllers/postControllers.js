@@ -140,9 +140,15 @@ exports.createNewLike = async (req, res, next) => {
 exports.getPostById = async (req, res, next) => {
   try {
     let postId = req.params.id;
-    let [post, _] = await Post.findById(postId);
+    if (!Number(postId)) {
+      let [posts, _] = await Post.findById(postId);
 
-    res.status(200).json({ post: post[0] });
+      res.status(200).json({ posts });
+    } else {
+      let [post, _] = await Post.findById(postId);
+
+      res.status(200).json({ post: post[0] });
+    }
   } catch (error) {
     console.log(error);
     next(error);

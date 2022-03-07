@@ -3,21 +3,26 @@ import PostCard from "./PostCard";
 import CreatePostCard from "../components/CreatePostCard";
 import axios from "axios";
 
-export default function PostCardList({ formatter }) {
+export default function PostCardList({ formatter, searchFilter }) {
   const [posts, setPosts] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/")
-      .then((res) => {
+    (async () => {
+      try {
+        let res;
+        if (searchFilter.length > 2) {
+          res = await axios.get(`http://localhost:3000/posts/${searchFilter}`);
+        } else {
+          res = await axios.get("http://localhost:3000/");
+        }
         setPosts(res.data.posts);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, [searchFilter]);
 
   if (isLoading) {
     return <>Loading...</>;
