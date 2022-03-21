@@ -33,7 +33,7 @@ exports.modifyUser = async (req, res, next) => {
 
     let pwd = await bcrypt.hash(req.body.pwd, 10);
     let newPwd;
-    if (req.body.newPwd) {
+    if (req.body.newPwd && req.body.newPwd.length > 5) {
       newPwd = await bcrypt.hash(req.body.newPwd, 10);
     } else {
       newPwd = pwd;
@@ -41,10 +41,21 @@ exports.modifyUser = async (req, res, next) => {
     let { firstName, lastName, email, birthday, gender } = req.body;
     let [user, _] = await User.findOne(email);
 
+    let avatar;
+    if (req.file) {
+      avatar = `${req.protocol}://${req.get("host")}/images/avatars/${
+        req.file.filename
+      }`;
+      console.log(avatar);
+    } else {
+      avatar = req.body.avatar;
+    }
+
     if (await bcrypt.compare(req.body.pwd, user[0].pwd)) {
       pwd = newPwd;
       await User.modifyOne(
         userId,
+        avatar,
         firstName,
         lastName,
         email,

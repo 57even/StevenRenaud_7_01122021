@@ -12,6 +12,7 @@ export default function Thread({ formatter }) {
   const [post, setPost] = useState(null);
   const { postId } = useParams();
   const [isEdit, setIsEdit] = useState(false);
+  let [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     axios
@@ -30,7 +31,7 @@ export default function Thread({ formatter }) {
   }
   return (
     <React.Fragment>
-      <TopBar />
+      <TopBar isAuth={isAuth} setIsAuth={setIsAuth} />
       <main className="py-8 p-3">
         <div className="w-full m-5 flex flex-col items-center justify-center gap-6">
           {!isEdit ? (
@@ -48,7 +49,11 @@ export default function Thread({ formatter }) {
               setIsEdit={setIsEdit}
             />
           )}
-          <CommentList formatter={formatter} commentCount={post.commentCount} />
+          <CommentList
+            formatter={formatter}
+            commentCount={post.commentCount}
+            isAuth={isAuth}
+          />
           <Outlet />
         </div>
       </main>

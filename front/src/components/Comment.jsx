@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PencilAltIcon, XCircleIcon } from "@heroicons/react/outline";
-import profilePic from "../icons/profile_pic.png";
 import TimeAgo from "react-timeago";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -23,11 +22,13 @@ export default function Comment({ comment, formatter }) {
   }
 
   const [authorName, setAuthorName] = useState();
+  const [authorPic, setAuthorPic] = useState();
   useEffect(() => {
     axios
       .get(`http://localhost:3000/users/${comment.author}`)
       .then((res) => {
         setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
+        setAuthorPic(res.data.user.avatar);
       })
       .catch((err) => {
         console.log(err);
@@ -95,7 +96,7 @@ export default function Comment({ comment, formatter }) {
             className="rounded-full"
           >
             <img
-              src={profilePic}
+              src={authorPic}
               alt="Avatar"
               className="h-7 w-7 object-cover rounded-full"
             />

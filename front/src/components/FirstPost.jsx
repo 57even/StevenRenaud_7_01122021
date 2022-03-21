@@ -7,7 +7,6 @@ import {
   PencilAltIcon,
   XCircleIcon,
 } from "@heroicons/react/outline";
-import profilePic from "../icons/profile_pic.png";
 import TimeAgo from "react-timeago";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +21,7 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
   }
 
   const [authorName, setAuthorName] = useState();
+  const [authorPic, setAuthorPic] = useState();
   let [isLike, setIsLike] = useState(0);
   useEffect(() => {
     (async () => {
@@ -30,6 +30,7 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
           `http://localhost:3000/users/${post.author}`
         );
         setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
+        setAuthorPic(res.data.user.avatar);
 
         if (userId && post.likeCount + post.dislikeCount > 0) {
           const res1 = await axios.get(
@@ -130,8 +131,9 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
     } else {
       commentCount = false;
     }
+    let image = post.image;
     await axios.delete(`http://localhost:3000/posts/${post.id}`, {
-      data: { commentCount },
+      data: { commentCount, image },
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -156,6 +158,32 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
     editPost = "";
   }
 
+  let postContent;
+  if (post.image && post.image !== "undefined") {
+    postContent = (
+      <div className="w-full flex flex-col p-2.5 pt-0">
+        <h1 className="font-bold text-lg">{post.title}</h1>
+        <div className="flex justify-center">
+          <img src={post.image} alt="ImagePost" />
+        </div>
+        <p>{post.text}</p>
+      </div>
+    );
+  } else if (post.text && post.text !== "undefined") {
+    postContent = (
+      <div className="flex flex-col p-2.5 pt-0">
+        <h1 className="font-bold text-lg">{post.title}</h1>
+        <p>{post.text}</p>
+      </div>
+    );
+  } else {
+    postContent = (
+      <div className="flex flex-col p-2.5 pt-0">
+        <h1 className="font-bold text-lg">{post.title}</h1>
+      </div>
+    );
+  }
+
   return (
     <main className="flex flex-col justify-center items-center">
       <section className="w-full flex flex-col items-center justify-center gap-2">
@@ -168,7 +196,7 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
                 className="rounded-full"
               >
                 <img
-                  src={profilePic}
+                  src={authorPic}
                   alt="Avatar"
                   className="h-8 w-8 object-cover rounded-full"
                 />
@@ -186,12 +214,7 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
             </div>
             {editPost}
           </div>
-          <div className="relative flex flex-col-reverse flex-wrap p-2.5 pt-0 overflow-hidden">
-            <div className="max-h-full overflow-hidden">
-              <h1 className="font-bold text-lg">{post.title}</h1>
-              <p>{post.text}</p>
-            </div>
-          </div>
+          {postContent}
           <div className="flex m-2.5 mt-1 gap-2">
             <button
               className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer"

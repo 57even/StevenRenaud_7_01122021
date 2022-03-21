@@ -5,7 +5,6 @@ import {
   ThumbDownIcon,
   AnnotationIcon,
 } from "@heroicons/react/outline";
-import profilePic from "../icons/profile_pic.png";
 import { Link } from "react-router-dom";
 import TimeAgo from "react-timeago";
 import axios from "axios";
@@ -19,6 +18,7 @@ export default function PostCard({ post, formatter }) {
   }
 
   const [authorName, setAuthorName] = useState();
+  const [authorPic, setAuthorPic] = useState();
   let [isLike, setIsLike] = useState(0);
   useEffect(() => {
     (async () => {
@@ -28,6 +28,7 @@ export default function PostCard({ post, formatter }) {
         );
 
         setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
+        setAuthorPic(res.data.user.avatar);
 
         if (userId && post.likeCount + post.dislikeCount > 0) {
           const res1 = await axios.get(
@@ -117,6 +118,49 @@ export default function PostCard({ post, formatter }) {
     }
   };
 
+  let postContent;
+  if (post.image && post.image !== "undefined") {
+    postContent = (
+      <Link
+        to={`/posts/${post.id}`}
+        key={post.id}
+        className="relative flex flex-col flex-wrap p-2.5 pt-0 overflow-hidden w-full"
+      >
+        <h3 className="font-bold text-lg">{post.title}</h3>
+        <div className="flex justify-center">
+          <img src={post.image} alt="ImagePost" className="max-h-675" />
+        </div>
+      </Link>
+    );
+  } else if (post.text && post.text !== "undefined") {
+    postContent = (
+      <Link
+        to={`/posts/${post.id}`}
+        key={post.id}
+        className="relative flex flex-col-reverse flex-wrap p-2.5 pt-0 max-h-52 overflow-hidden w-full"
+      >
+        <div className="max-h-full overflow-hidden">
+          <h3 className="font-bold text-lg">{post.title}</h3>
+          <p>{post.text}</p>
+        </div>
+        <div className="background"></div>
+      </Link>
+    );
+  } else {
+    postContent = (
+      <Link
+        to={`/posts/${post.id}`}
+        key={post.id}
+        className="relative flex flex-col-reverse flex-wrap p-2.5 pt-0 max-h-52 overflow-hidden w-full"
+      >
+        <div className="max-h-full overflow-hidden">
+          <h3 className="font-bold text-lg">{post.title}</h3>
+        </div>
+        <div className="background"></div>
+      </Link>
+    );
+  }
+
   return (
     <div className="flex flex-col items-start rounded-md bg-white w-45rem border">
       <div className="flex gap-1.5 items-center pl-2.5 pt-1.5 text-sm">
@@ -126,7 +170,7 @@ export default function PostCard({ post, formatter }) {
           className="rounded-full"
         >
           <img
-            src={profilePic}
+            src={authorPic}
             alt="Avatar"
             className="h-8 w-8 object-cover rounded-full"
           />
@@ -142,17 +186,7 @@ export default function PostCard({ post, formatter }) {
           , <TimeAgo date={post.date} formatter={formatter} />
         </span>
       </div>
-      <Link
-        to={`/posts/${post.id}`}
-        key={post.id}
-        className="relative flex flex-col-reverse flex-wrap p-2.5 pt-0 max-h-52 overflow-hidden w-full"
-      >
-        <div className="max-h-full overflow-hidden">
-          <h3 className="font-bold text-lg">{post.title}</h3>
-          <p>{post.text}</p>
-        </div>
-        <div className="background"></div>
-      </Link>
+      {postContent}
       <div className="flex m-2.5 mt-1 gap-2">
         <button
           className="flex gap-1.5 items-center border rounded-lg px-1.5 py-0.5 text-gray-700 cursor-pointer"

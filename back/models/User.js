@@ -42,8 +42,18 @@ class User {
     return db.execute(sql);
   }
 
-  static modifyOne(userId, firstName, lastName, email, pwd, birthday, gender) {
-    let sql = `UPDATE users SET firstName = '${firstName}', lastName = '${lastName}', email = '${email}', pwd = '${pwd}', birthday = '${birthday}', gender = '${gender}' WHERE id = ${userId};`;
+  static modifyOne(
+    userId,
+    avatar,
+    firstName,
+    lastName,
+    email,
+    pwd,
+    birthday,
+    gender
+  ) {
+    console.log(userId);
+    let sql = `UPDATE users SET avatar = '${avatar}', firstName = '${firstName}', lastName = '${lastName}', email = '${email}', pwd = '${pwd}', birthday = '${birthday}', gender = '${gender}' WHERE id = ${userId};`;
 
     return db.execute(sql);
   }

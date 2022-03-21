@@ -14,3 +14,6 @@
   background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
   pointer-events: none;
 }
+.max-h-675 {
+  max-height: 500px;
+}

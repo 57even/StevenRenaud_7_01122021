@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupForm() {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -73,6 +75,7 @@ export default function SignupForm() {
         });
         setSubmitted(true);
         setError(false);
+        navigate("/login");
       })();
     }
   };
@@ -119,7 +122,7 @@ export default function SignupForm() {
         </div>
         <form className="flex flex-col gap-2 m-2">
           <div className="flex flex-col items-center">
-            <label for="firstName">Prénom :</label>
+            <label>Prénom :</label>
             <input
               className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleFirstName}
@@ -129,7 +132,7 @@ export default function SignupForm() {
             />
           </div>
           <div className="flex flex-col items-center">
-            <label for="lastName">Nom :</label>
+            <label>Nom :</label>
             <input
               className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleLastName}
@@ -139,7 +142,7 @@ export default function SignupForm() {
             />
           </div>
           <div className="flex flex-col items-center">
-            <label for="email">Email :</label>
+            <label>Email :</label>
             <input
               className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleEmail}
@@ -149,7 +152,7 @@ export default function SignupForm() {
             />
           </div>
           <div className="flex flex-col items-center">
-            <label for="pwd">Mot de Passe :</label>
+            <label>Mot de Passe :</label>
             <input
               className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handlePwd}
@@ -168,7 +171,7 @@ export default function SignupForm() {
             />
           </div>
           <div className="flex flex-col items-center">
-            <label for="birthday">Date de Naissance :</label>
+            <label>Date de Naissance :</label>
             <input
               className="ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleBirthday}
@@ -178,7 +181,7 @@ export default function SignupForm() {
             />
           </div>
           <div className="flex flex-col items-center">
-            <label for="password">Genre :</label>
+            <label>Genre :</label>
             <select
               className="ml-2 my-1 bg-white border rounded-sm focus:outline-none focus:border-primary p-1"
               name="gender"

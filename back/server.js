@@ -6,6 +6,7 @@ const cors = require("cors");
 
 // Middleware
 app.use(express.json());
+app.use(express.static("public"));
 app.use(cors());
 
 app.use("/", require("./routes/postRoutes"));

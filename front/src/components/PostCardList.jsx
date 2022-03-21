@@ -3,7 +3,7 @@ import PostCard from "./PostCard";
 import CreatePostCard from "../components/CreatePostCard";
 import axios from "axios";
 
-export default function PostCardList({ formatter, searchFilter }) {
+export default function PostCardList({ formatter, searchFilter, isAuth }) {
   const [posts, setPosts] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -27,10 +27,18 @@ export default function PostCardList({ formatter, searchFilter }) {
   if (isLoading) {
     return <>Loading...</>;
   }
+
+  let createPostCard;
+  if (isAuth) {
+    createPostCard = <CreatePostCard />;
+  } else {
+    createPostCard = "";
+  }
+
   return (
     <main className="flex flex-col justify-center items-center py-8 p-3">
       <div className="w-full m-5 flex flex-col items-center justify-center gap-2">
-        <CreatePostCard />
+        {createPostCard}
         {posts.reverse().map((post) => {
           return <PostCard key={post.id} post={post} formatter={formatter} />;
         })}

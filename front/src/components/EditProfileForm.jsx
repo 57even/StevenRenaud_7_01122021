@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import profilePic from "../icons/profile_pic.png";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "./EditProfileForm.css";
 
 export default function EditProfileForm() {
   const navigate = useNavigate();
   const { profileId } = useParams();
+  const [avatar, setAvatar] = useState("");
+  const [avatarPreview, setAvatarPreview] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,6 +20,22 @@ export default function EditProfileForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+
+  const handleAvatar = (e) => {
+    let file = e.target.files[0];
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = function () {
+      if (this.width > 1920 || this.height > 1920 || file.size > 5000000) {
+        alert("Maximum 1920x1920 et 5mb");
+      } else {
+        setAvatar(file);
+        setAvatarPreview(URL.createObjectURL(file));
+
+        setSubmitted(false);
+      }
+    };
+  };
 
   const handleFirstName = (e) => {
     setFirstName(e.target.value);
@@ -62,6 +80,7 @@ export default function EditProfileForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
+      !avatar ||
       firstName === "" ||
       lastName === "" ||
       email === "" ||
@@ -73,29 +92,39 @@ export default function EditProfileForm() {
       setError(true);
     } else {
       (async () => {
-        let newPwd = false;
-        if (newPassword !== "") {
-          newPwd = newPassword;
+        try {
+          let newPwd = false;
+          if (newPassword !== "") {
+            newPwd = newPassword;
+          }
+
+          let token = JSON.parse(localStorage.getItem("token")).token;
+          let formData = new FormData();
+          formData.append("avatar", avatar);
+          formData.append("firstName", firstName);
+          formData.append("lastName", lastName);
+          formData.append("email", email);
+          formData.append("pwd", password);
+          formData.append("newPwd", newPwd);
+          formData.append("birthday", birthday);
+          formData.append("gender", gender);
+
+          await axios({
+            method: "put",
+            url: `http://localhost:3000/users/${profileId}`,
+            data: formData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          setSubmitted(true);
+          setError(false);
+          navigate(`/profile/${profileId}`);
+        } catch (error) {
+          console.log(error);
         }
-
-        let token = JSON.parse(localStorage.getItem("token")).token;
-        await axios.put(
-          `http://localhost:3000/users/${profileId}`,
-          {
-            firstName,
-            lastName,
-            email,
-            pwd: password,
-            newPwd,
-            birthday,
-            gender,
-          },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        setSubmitted(true);
-        setError(false);
-        navigate(`/profile/${profileId}`);
       })();
     }
   };
@@ -132,6 +161,8 @@ export default function EditProfileForm() {
     axios
       .get(`http://localhost:3000/users/${profileId}`)
       .then((res) => {
+        setAvatar(res.data.user.avatar);
+        setAvatarPreview(res.data.user.avatar);
         setFirstName(res.data.user.firstName);
         setLastName(res.data.user.lastName);
         setEmail(res.data.user.email);
@@ -147,9 +178,17 @@ export default function EditProfileForm() {
     <main className="flex flex-col items-center py-14">
       <div className="w-80 flex flex-col items-center bg-white p-5 rounded-md border">
         <img
-          src={profilePic}
+          src={avatarPreview}
           alt="Avatar"
-          className="h-13 w-13 object-cover rounded-full p-2 pb-4"
+          className="h-56 w-56 object-cover rounded-50 p-2 pb-4"
+        />
+        <input
+          className="flex mb-2.5"
+          type="file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          onChange={handleAvatar}
         />
         <div className="flex flex-col gap-2 m-2">
           <div className="flex flex-col items-center">

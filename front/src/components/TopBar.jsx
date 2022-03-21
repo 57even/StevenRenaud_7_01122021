@@ -4,19 +4,20 @@ import { Link } from "react-router-dom";
 import logo from "../icons/icon-left-font.png";
 import { ChevronDownIcon, SearchIcon } from "@heroicons/react/solid";
 import { Menu, Transition } from "@headlessui/react";
-import profilePic from "../icons/profile_pic.png";
 import axios from "axios";
+import profilePic from "../icons/profile_pic.png";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function TopBar({ setSearchFilter }) {
+export default function TopBar({ setSearchFilter, isAuth, setIsAuth }) {
   let logButtons = "";
   let [userName, setUserName] = useState("");
   let [userId, setUserId] = useState("");
   let authHide = "hidden";
   let [auth, setAuth] = useState();
+  const [authorPic, setAuthorPic] = useState(profilePic);
   useEffect(() => {
     (async () => {
       if (JSON.parse(localStorage.getItem("token"))) {
@@ -30,22 +31,30 @@ export default function TopBar({ setSearchFilter }) {
             { headers: { Authorization: `Bearer ${token}` } }
           );
           setAuth(res.data.auth);
+          if (typeof isAuth == "boolean") {
+            setIsAuth(true);
+          }
           setUserId(userId);
 
           const res1 = await axios.get(`http://localhost:3000/users/${userId}`);
           let firstName = res1.data.user.firstName;
           let lastName = res1.data.user.lastName;
           setUserName(`${firstName} ${lastName}`);
+          setAuthorPic(res1.data.user.avatar);
         } catch (error) {
           console.log(error);
           localStorage.removeItem("token");
+          window.location.reload();
         }
       } else {
         setAuth(false);
+        if (typeof isAuth == "boolean") {
+          setIsAuth(false);
+        }
         setUserName("");
       }
     })();
-  }, []);
+  }, [isAuth, setIsAuth]);
 
   if (auth === false && logButtons === "") {
     logButtons = (
@@ -104,7 +113,7 @@ export default function TopBar({ setSearchFilter }) {
           <div className="border rounded-3xl px-0.5 py-0.5">
             <Menu.Button className="flex items-center h-full justify-center w-full focus:outline-none">
               <img
-                src={profilePic}
+                src={authorPic}
                 alt="Avatar"
                 className="h-8 w-8 object-cover rounded-full"
                 aria-hidden="true"

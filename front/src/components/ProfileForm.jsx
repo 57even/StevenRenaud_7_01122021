@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import profilePic from "../icons/profile_pic.png";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
@@ -10,6 +9,7 @@ export default function ProfileForm() {
     authId = JSON.parse(localStorage.getItem("token")).userId;
   }
   const { userId } = useParams();
+  const [avatar, setAvatar] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,6 +21,7 @@ export default function ProfileForm() {
     axios
       .get(`http://localhost:3000/users/${userId}`)
       .then((res) => {
+        setAvatar(res.data.user.avatar);
         setFirstName(res.data.user.firstName);
         setLastName(res.data.user.lastName);
         setEmail(res.data.user.email);
@@ -40,9 +41,9 @@ export default function ProfileForm() {
     <main className="flex flex-col items-center py-32">
       <div className="w-80 flex flex-col items-center bg-white p-5 rounded-md border">
         <img
-          src={profilePic}
+          src={avatar}
           alt="Avatar"
-          className="h-13 w-13 object-cover rounded-full p-2 pb-4"
+          className="h-56 w-56 object-cover rounded-full p-2 pb-4"
         />
         <div className="flex flex-col gap-2 m-2">
           <div className="flex flex-col items-center">

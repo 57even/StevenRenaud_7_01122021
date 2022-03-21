@@ -4,7 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import CreateCommentCard from "./CreateCommentCard";
 
-export default function CommentList({ formatter, commentCount }) {
+export default function CommentList({ formatter, commentCount, isAuth }) {
   const [comments, setComments] = useState([]);
   let { postId } = useParams();
 
@@ -23,10 +23,17 @@ export default function CommentList({ formatter, commentCount }) {
     })();
   }, [commentCount, postId]);
 
+  let createCommentCard;
+  if (isAuth) {
+    createCommentCard = <CreateCommentCard />;
+  } else {
+    createCommentCard = "";
+  }
+
   return (
     <section className="flex flex-col items-center -mt-5 mb-2">
       <div className="flex flex-col items-center gap-2.5 w-45rem rounded-md border bg-white">
-        <CreateCommentCard />
+        {createCommentCard}
         {comments.map((comment) => {
           return (
             <Comment key={comment.id} comment={comment} formatter={formatter} />

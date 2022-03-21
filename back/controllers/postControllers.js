@@ -31,8 +31,22 @@ exports.getAllComments = async (req, res, next) => {
 
 exports.createNewPost = async (req, res, next) => {
   try {
-    let { author, title, text } = req.body;
-    let post = new Post(author, title, text);
+    let post;
+
+    if (req.file) {
+      let { author, title, text } = req.body;
+      let image = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+
+      console.log(image);
+
+      post = new Post(author, title, text, image);
+    } else {
+      let { author, title, text } = req.body;
+
+      post = new Post(author, title, text);
+    }
 
     post = await post.save();
 
@@ -166,9 +180,9 @@ exports.getLikeById = async (req, res, next) => {
     if (checkLike[0].length > 0) {
       let [like, _] = await Like.findById(postId, userId);
       res.status(200).json({ like: like[0] });
+    } else {
+      res.status(200).json({ message: "No like found" });
     }
-
-    res.status(200).json({ message: "No like found" });
   } catch (error) {
     console.log(error);
     next(error);
@@ -214,8 +228,8 @@ exports.modifyLike = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
   try {
     let postId = req.params.id;
-    let { commentCount } = req.body;
-    await Post.deleteById(postId, commentCount);
+    let { commentCount, image } = req.body;
+    await Post.deleteById(postId, commentCount, image);
 
     res.status(200).json({ message: "Post deleted successfully." });
   } catch (error) {
