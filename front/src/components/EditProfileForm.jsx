@@ -26,8 +26,8 @@ export default function EditProfileForm() {
     const img = new Image();
     img.src = URL.createObjectURL(file);
     img.onload = function () {
-      if (this.width > 1920 || this.height > 1920 || file.size > 5000000) {
-        alert("Maximum 1920x1920 et 5mb");
+      if (this.width > 512 || this.height > 512 || file.size > 500000) {
+        alert("Maximum 512x512 et 500kb");
       } else {
         setAvatar(file);
         setAvatarPreview(URL.createObjectURL(file));
