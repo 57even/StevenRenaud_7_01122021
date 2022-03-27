@@ -28,7 +28,7 @@ class Like {
       userId int,
       likeValue int,
       PRIMARY KEY (id),
-      FOREIGN KEY (userId) REFERENCES users(id)
+      FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     )`;
 
     return db.execute(sql);

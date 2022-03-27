@@ -16,9 +16,21 @@ export default function Comment({ comment, formatter }) {
 
   let token;
   let authId;
+  let isAdmin;
   if (JSON.parse(localStorage.getItem("token"))) {
     token = JSON.parse(localStorage.getItem("token")).token;
     authId = JSON.parse(localStorage.getItem("token")).userId;
+    isAdmin = JSON.parse(localStorage.getItem("token")).isAdmin;
+    if (isAdmin === 1) {
+      (async () => {
+        try {
+          const res = await axios.get(`http://localhost:3000/users/${authId}`);
+          isAdmin = res.data.user.admin;
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
   }
 
   const [authorName, setAuthorName] = useState();
@@ -69,7 +81,7 @@ export default function Comment({ comment, formatter }) {
   };
 
   let editComment;
-  if (Number(authId) === Number(comment.author)) {
+  if (Number(authId) === Number(comment.author) || isAdmin === 1) {
     editComment = (
       <div className="flex">
         <PencilAltIcon

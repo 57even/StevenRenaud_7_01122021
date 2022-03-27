@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import TimeAgo from "react-timeago";
 import axios from "axios";
 
-export default function PostCard({ post, formatter }) {
+export default function PostCard({ post, formatter, isAuth }) {
   let token;
   let userId;
   if (JSON.parse(localStorage.getItem("token"))) {
@@ -65,56 +65,60 @@ export default function PostCard({ post, formatter }) {
   };
 
   const handleLike = async () => {
-    let postId = post.id;
-    let likeValue = 1;
-    await axios.post(
-      `http://localhost:3000/likes/${post.id}`,
-      {
-        postId,
-        userId,
-        likeValue,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
+    if (isAuth == 1) {
+      let postId = post.id;
+      let likeValue = 1;
+      await axios.post(
+        `http://localhost:3000/likes/${post.id}`,
+        {
+          postId,
+          userId,
+          likeValue,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (isLike !== 1) {
+        handleLikeCount(1);
+        if (isLike === -1) handleDislikeCount(-1);
+        likeColor = "text-blue-500";
+        dislikeColor = "";
+        setIsLike(1);
+      } else if (isLike === 1) {
+        handleLikeCount(-1);
+        likeColor = "";
+        setIsLike(0);
       }
-    );
-    if (isLike !== 1) {
-      handleLikeCount(1);
-      if (isLike === -1) handleDislikeCount(-1);
-      likeColor = "text-blue-500";
-      dislikeColor = "";
-      setIsLike(1);
-    } else if (isLike === 1) {
-      handleLikeCount(-1);
-      likeColor = "";
-      setIsLike(0);
     }
   };
 
   const handleDislike = async () => {
-    let postId = post.id;
-    let likeValue = -1;
-    await axios.post(
-      `http://localhost:3000/likes/${post.id}`,
-      {
-        postId,
-        userId,
-        likeValue,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
+    if (isAuth == 1) {
+      let postId = post.id;
+      let likeValue = -1;
+      await axios.post(
+        `http://localhost:3000/likes/${post.id}`,
+        {
+          postId,
+          userId,
+          likeValue,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (isLike !== -1) {
+        handleDislikeCount(1);
+        if (isLike === 1) handleLikeCount(-1);
+        dislikeColor = "text-red-500";
+        likeColor = "";
+        setIsLike(-1);
+      } else if (isLike === -1) {
+        handleDislikeCount(-1);
+        dislikeColor = "";
+        setIsLike(0);
       }
-    );
-    if (isLike !== -1) {
-      handleDislikeCount(1);
-      if (isLike === 1) handleLikeCount(-1);
-      dislikeColor = "text-red-500";
-      likeColor = "";
-      setIsLike(-1);
-    } else if (isLike === -1) {
-      handleDislikeCount(-1);
-      dislikeColor = "";
-      setIsLike(0);
     }
   };
 
@@ -162,7 +166,7 @@ export default function PostCard({ post, formatter }) {
   }
 
   return (
-    <div className="flex flex-col items-start rounded-md bg-white w-45rem border">
+    <div className="flex flex-col items-start rounded-md bg-white max-w-3xl w-full border">
       <div className="flex gap-1.5 items-center pl-2.5 pt-1.5 text-sm">
         <Link
           to={`/profile/${post.author}`}

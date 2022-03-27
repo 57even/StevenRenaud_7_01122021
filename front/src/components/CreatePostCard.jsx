@@ -132,11 +132,11 @@ export default function CreatePostCard() {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex w-45rem pl-3 pt-1 pb-0.5 -mb-0.5 relative text-gray-800 bg-gray-50 rounded-t-md border">
+    <div className="flex flex-col items-center max-w-3xl w-full">
+      <div className="flex w-full pl-3 pt-1 pb-0.5 -mb-0.5 relative text-gray-800 bg-gray-50 rounded-t-md border">
         <h3>Créer une publication</h3>
       </div>
-      <form className="flex flex-col items-center rounded-b-md bg-white w-45rem px-2 border">
+      <form className="flex flex-col items-center rounded-b-md bg-white w-full px-2 border">
         <div className="messages">
           {errorMessage()}
           {successMessage()}

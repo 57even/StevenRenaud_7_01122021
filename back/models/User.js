@@ -1,4 +1,5 @@
 const db = require("../config/db");
+const fs = require("fs");
 
 class User {
   constructor(firstName, lastName, email, pwd, birthday, gender) {
@@ -54,6 +55,20 @@ class User {
   ) {
     console.log(userId);
     let sql = `UPDATE users SET avatar = '${avatar}', firstName = '${firstName}', lastName = '${lastName}', email = '${email}', pwd = '${pwd}', birthday = '${birthday}', gender = '${gender}' WHERE id = ${userId};`;
+
+    return db.execute(sql);
+  }
+
+  static deleteById(id, avatar) {
+    if (avatar) {
+      const filename = avatar.split("/avatars/")[1];
+
+      if (filename) {
+        fs.unlinkSync(`public/images/avatars/${filename}`);
+      }
+    }
+
+    let sql = `DELETE FROM users WHERE id = ${id};`;
 
     return db.execute(sql);
   }

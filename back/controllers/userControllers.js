@@ -23,7 +23,14 @@ exports.authCheck = async (req, res, next) => {
 
 exports.modifyUser = async (req, res, next) => {
   try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "secret_key_109571533518");
+    const tokenUserId = decodedToken.userId;
     let userId = req.params.id;
+
+    if (userId != tokenUserId) {
+      return res.status(401).json({ error: "User not authorized !" });
+    }
     const validEmail =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const validPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -117,13 +124,39 @@ exports.login = async (req, res, next) => {
     if (await bcrypt.compare(req.body.pwd, user[0].pwd)) {
       res.status(200).json({
         userId: user[0].id,
-        token: jwt.sign({ userId: user[0].id }, "secret_key_109571533518", {
-          expiresIn: "72h",
-        }),
+        isAdmin: user[0].admin,
+        token: jwt.sign(
+          { userId: user[0].id, isAdmin: user[0].admin },
+          "secret_key_109571533518",
+          {
+            expiresIn: "72h",
+          }
+        ),
       });
     } else {
       return res.status(401).json({ error: "Mot de passe incorrect !" });
     }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, "secret_key_109571533518");
+    const tokenUserId = decodedToken.userId;
+    let userId = req.params.id;
+
+    if (userId !== tokenUserId) {
+      return res.status(401).json({ error: "User not authorized !" });
+    }
+
+    let { avatar } = req.body;
+    await User.deleteById(userId, avatar);
+
+    res.status(200).json({ message: "User deleted successfully." });
   } catch (error) {
     console.log(error);
     next(error);

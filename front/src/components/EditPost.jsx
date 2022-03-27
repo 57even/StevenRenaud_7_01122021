@@ -82,7 +82,7 @@ export default function EditPost({ post, setIsEdit }) {
 
   return (
     <div className="flex flex-col items-center">
-      <form className="flex flex-col items-center rounded-b-md bg-white w-45rem px-2 border">
+      <form className="flex flex-col items-center rounded-b-md bg-white max-w-3xl w-full px-2 border">
         <div className="messages">
           {errorMessage()}
           {successMessage()}

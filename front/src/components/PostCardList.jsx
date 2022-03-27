@@ -40,7 +40,14 @@ export default function PostCardList({ formatter, searchFilter, isAuth }) {
       <div className="w-full m-5 flex flex-col items-center justify-center gap-2">
         {createPostCard}
         {posts.reverse().map((post) => {
-          return <PostCard key={post.id} post={post} formatter={formatter} />;
+          return (
+            <PostCard
+              key={post.id}
+              post={post}
+              formatter={formatter}
+              isAuth={isAuth}
+            />
+          );
         })}
       </div>
     </main>

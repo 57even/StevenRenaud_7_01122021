@@ -38,28 +38,28 @@ export default function ProfileForm() {
   }
 
   return (
-    <main className="flex flex-col items-center py-32">
-      <div className="w-80 flex flex-col items-center bg-white p-5 rounded-md border">
+    <main className="flex flex-col items-center py-14 mx-2">
+      <div className="max-w-xs w-full flex flex-col items-center bg-white p-5 rounded-md border">
         <img
           src={avatar}
           alt="Avatar"
-          className="h-56 w-56 object-cover rounded-full p-2 pb-4"
+          className="w-5/6 object-cover rounded-full p-2 pb-4"
         />
-        <div className="flex flex-col gap-2 m-2">
-          <div className="flex flex-col items-center">
-            <label htmlFor="name">Prénom : {firstName}</label>
+        <div className="w-full flex flex-col gap-2 m-2">
+          <div className="w-full flex flex-col items-center">
+            <label>Prénom : {firstName}</label>
           </div>
-          <div className="flex flex-col items-center">
-            <label htmlFor="lastName">Nom : {lastName}</label>
+          <div className="w-full flex flex-col items-center">
+            <label>Nom : {lastName}</label>
           </div>
-          <div className="flex flex-col items-center">
-            <label htmlFor="email">Email : {email}</label>
+          <div className="w-full flex flex-col items-center">
+            <label>Email : {email}</label>
           </div>
-          <div className="flex flex-col items-center">
-            <label htmlFor="password">Date de Naissance : {birthday}</label>
+          <div className="w-full flex flex-col items-center text-center">
+            <label>Date de Naissance : {birthday}</label>
           </div>
-          <div className="flex flex-col items-center">
-            <label htmlFor="password">Genre : {gender}</label>
+          <div className="w-full flex flex-col items-center">
+            <label>Genre : {gender}</label>
           </div>
         </div>
         <Link

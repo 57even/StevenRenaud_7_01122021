@@ -11,6 +11,7 @@ router.route("/login").post(userControllers.login);
 router
   .route("/:id")
   .get(userControllers.getUser)
-  .put(auth, multer, userControllers.modifyUser);
+  .put(auth, multer, userControllers.modifyUser)
+  .delete(auth, userControllers.deleteUser);
 
 module.exports = router;

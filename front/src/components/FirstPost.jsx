@@ -11,13 +11,25 @@ import TimeAgo from "react-timeago";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-export default function FirstPost({ post, formatter, setIsEdit }) {
+export default function FirstPost({ post, formatter, setIsEdit, isAuth }) {
   const navigate = useNavigate();
   let token;
   let userId;
+  let isAdmin;
   if (JSON.parse(localStorage.getItem("token"))) {
     token = JSON.parse(localStorage.getItem("token")).token;
     userId = JSON.parse(localStorage.getItem("token")).userId;
+    isAdmin = JSON.parse(localStorage.getItem("token")).isAdmin;
+    if (isAdmin === 1) {
+      (async () => {
+        try {
+          const res = await axios.get(`http://localhost:3000/users/${userId}`);
+          isAdmin = res.data.user.admin;
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
   }
 
   const [authorName, setAuthorName] = useState();
@@ -71,56 +83,60 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
   };
 
   const handleLike = async () => {
-    let postId = post.id;
-    let likeValue = 1;
-    await axios.post(
-      `http://localhost:3000/likes/${post.id}`,
-      {
-        postId,
-        userId,
-        likeValue,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
+    if (isAuth == 1) {
+      let postId = post.id;
+      let likeValue = 1;
+      await axios.post(
+        `http://localhost:3000/likes/${post.id}`,
+        {
+          postId,
+          userId,
+          likeValue,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (isLike !== 1) {
+        handleLikeCount(1);
+        if (isLike === -1) handleDislikeCount(-1);
+        likeColor = "text-blue-500";
+        dislikeColor = "";
+        setIsLike(1);
+      } else if (isLike === 1) {
+        handleLikeCount(-1);
+        likeColor = "";
+        setIsLike(0);
       }
-    );
-    if (isLike !== 1) {
-      handleLikeCount(1);
-      if (isLike === -1) handleDislikeCount(-1);
-      likeColor = "text-blue-500";
-      dislikeColor = "";
-      setIsLike(1);
-    } else if (isLike === 1) {
-      handleLikeCount(-1);
-      likeColor = "";
-      setIsLike(0);
     }
   };
 
   const handleDislike = async () => {
-    let postId = post.id;
-    let likeValue = -1;
-    await axios.post(
-      `http://localhost:3000/likes/${post.id}`,
-      {
-        postId,
-        userId,
-        likeValue,
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
+    if (isAuth == 1) {
+      let postId = post.id;
+      let likeValue = -1;
+      await axios.post(
+        `http://localhost:3000/likes/${post.id}`,
+        {
+          postId,
+          userId,
+          likeValue,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (isLike !== -1) {
+        handleDislikeCount(1);
+        if (isLike === 1) handleLikeCount(-1);
+        dislikeColor = "text-red-500";
+        likeColor = "";
+        setIsLike(-1);
+      } else if (isLike === -1) {
+        handleDislikeCount(-1);
+        dislikeColor = "";
+        setIsLike(0);
       }
-    );
-    if (isLike !== -1) {
-      handleDislikeCount(1);
-      if (isLike === 1) handleLikeCount(-1);
-      dislikeColor = "text-red-500";
-      likeColor = "";
-      setIsLike(-1);
-    } else if (isLike === -1) {
-      handleDislikeCount(-1);
-      dislikeColor = "";
-      setIsLike(0);
     }
   };
 
@@ -141,7 +157,7 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
   };
 
   let editPost;
-  if (Number(userId) === Number(post.author)) {
+  if (Number(userId) === Number(post.author) || isAdmin === 1) {
     editPost = (
       <div className="flex">
         <PencilAltIcon
@@ -185,9 +201,9 @@ export default function FirstPost({ post, formatter, setIsEdit }) {
   }
 
   return (
-    <main className="flex flex-col justify-center items-center">
+    <main className="w-full flex flex-col justify-center items-center">
       <section className="w-full flex flex-col items-center justify-center gap-2">
-        <div className="flex flex-col items-start rounded-md bg-white w-45rem border">
+        <div className="flex flex-col items-start rounded-md bg-white max-w-3xl w-full border">
           <div className="w-full flex justify-between">
             <div className="flex gap-1.5 items-center pl-2.5 pt-1.5 text-sm">
               <Link

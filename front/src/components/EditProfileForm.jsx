@@ -129,6 +129,23 @@ export default function EditProfileForm() {
     }
   };
 
+  const handleDelete = async () => {
+    let token = JSON.parse(localStorage.getItem("token")).token;
+    if (avatar !== "http://localhost:3000/images/avatars/profile_pic.png") {
+      await axios.delete(`http://localhost:3000/users/${profileId}`, {
+        data: { avatar },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } else {
+      await axios.delete(`http://localhost:3000/users/${profileId}`, {
+        data: { avatar: "" },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+
+    navigate("/");
+  };
+
   // Showing success message
   const successMessage = () => {
     return (
@@ -158,6 +175,10 @@ export default function EditProfileForm() {
   };
 
   useEffect(() => {
+    if (JSON.parse(localStorage.getItem("token")).userId != profileId) {
+      navigate(`/profile/${profileId}`);
+    }
+
     axios
       .get(`http://localhost:3000/users/${profileId}`)
       .then((res) => {
@@ -172,7 +193,7 @@ export default function EditProfileForm() {
       .catch((err) => {
         console.log(err);
       });
-  }, [profileId]);
+  }, [profileId, navigate]);
 
   return (
     <main className="flex flex-col items-center py-14">
@@ -317,6 +338,13 @@ export default function EditProfileForm() {
           className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white"
         >
           Enregistrer
+        </button>
+        <button
+          onClick={handleDelete}
+          type="submit"
+          className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white"
+        >
+          Supprimer le compte
         </button>
       </div>
     </main>

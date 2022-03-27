@@ -31,8 +31,8 @@ export default function CommentList({ formatter, commentCount, isAuth }) {
   }
 
   return (
-    <section className="flex flex-col items-center -mt-5 mb-2">
-      <div className="flex flex-col items-center gap-2.5 w-45rem rounded-md border bg-white">
+    <section className="max-w-3xl w-full flex flex-col items-center -mt-5 mb-2">
+      <div className="w-full flex flex-col items-center gap-2.5 rounded-md border bg-white">
         {createCommentCard}
         {comments.map((comment) => {
           return (

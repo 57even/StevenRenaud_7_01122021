@@ -33,13 +33,14 @@ export default function Thread({ formatter }) {
     <React.Fragment>
       <TopBar isAuth={isAuth} setIsAuth={setIsAuth} />
       <main className="py-8 p-3">
-        <div className="w-full m-5 flex flex-col items-center justify-center gap-6">
+        <div className="w-max-3xl w-full mt-5 flex flex-col items-center justify-center gap-6">
           {!isEdit ? (
             <FirstPost
               key={post.id}
               post={post}
               formatter={formatter}
               setIsEdit={setIsEdit}
+              isAuth={isAuth}
             />
           ) : (
             <EditPost

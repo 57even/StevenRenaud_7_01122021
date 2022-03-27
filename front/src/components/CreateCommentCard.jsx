@@ -73,11 +73,11 @@ export default function CreateCommentCard() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <div className="flex w-full pl-3 pt-1 pb-0.5 -mb-0.5 relative text-gray-800 bg-gray-50 rounded-t-md border">
         <h3>Commenter</h3>
       </div>
-      <form className="flex flex-col items-center rounded-b-md bg-white w-45rem px-1 border">
+      <form className="flex flex-col items-center rounded-b-md bg-white w-full px-1 border">
         <div className="messages">
           {errorMessage()}
           {successMessage()}

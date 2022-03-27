@@ -69,30 +69,28 @@ export default function LoginForm() {
   };
 
   return (
-    <main className="flex flex-col items-center py-32">
-      <div className="flex flex-col items-center bg-white p-5 rounded-md border">
-        <h1 className="w-24 m-2 border-b mb-3 text-center text-lg">
-          Connexion
-        </h1>
+    <main className="flex flex-col items-center py-14 mx-2">
+      <div className="max-w-xs w-full flex flex-col items-center justify-center bg-white p-5 rounded-md border">
+        <h1 className="m-2 border-b mb-3 text-center text-lg">Connexion</h1>
         <div className="messages">
           {errorMessage()}
           {successMessage()}
         </div>
-        <form className="flex flex-col gap-2 m-2">
-          <div className="flex flex-col items-center">
-            <label forhtml="email">Email :</label>
+        <form className="w-full flex flex-col items-center gap-2 m-2">
+          <div className="w-full flex flex-col items-center">
+            <label>Email :</label>
             <input
-              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleEmail}
               value={email}
               type="text"
               name="email"
             />
           </div>
-          <div className="flex flex-col items-center">
-            <label forhtml="pwd">Mot de Passe :</label>
+          <div className="w-full flex flex-col items-center">
+            <label>Mot de Passe :</label>
             <input
-              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handlePwd}
               value={pwd}
               type="password"
@@ -102,7 +100,7 @@ export default function LoginForm() {
           <button
             onClick={handleSubmit}
             type="submit"
-            className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white"
+            className="w-11/12 my-4 bg-primary rounded-xl border px-3 py-1.5 text-white"
           >
             Se Connecter
           </button>

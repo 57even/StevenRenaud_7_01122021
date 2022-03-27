@@ -111,79 +111,77 @@ export default function SignupForm() {
   };
 
   return (
-    <main className="flex flex-col items-center py-32">
-      <div className="w-80 flex flex-col items-center bg-white p-5 rounded-md border">
-        <h1 className="w-24 m-2 border-b mb-3 text-center text-lg">
-          Inscription
-        </h1>
+    <main className="flex flex-col items-center py-14 mx-2">
+      <div className="max-w-xs w-full flex flex-col items-center bg-white p-5 rounded-md border">
+        <h1 className="m-2 border-b mb-3 text-center text-lg">Inscription</h1>
         <div className="messages">
           {errorMessage()}
           {successMessage()}
         </div>
-        <form className="flex flex-col gap-2 m-2">
-          <div className="flex flex-col items-center">
+        <form className="w-full flex flex-col gap-2 m-2">
+          <div className="w-full flex flex-col items-center">
             <label>Prénom :</label>
             <input
-              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleFirstName}
               value={firstName}
               type="text"
               name="firstName"
             />
           </div>
-          <div className="flex flex-col items-center">
+          <div className="w-full flex flex-col items-center">
             <label>Nom :</label>
             <input
-              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleLastName}
               value={lastName}
               type="text"
               name="lastName"
             />
           </div>
-          <div className="flex flex-col items-center">
+          <div className="w-full flex flex-col items-center">
             <label>Email :</label>
             <input
-              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleEmail}
               value={email}
               type="email"
               name="email"
             />
           </div>
-          <div className="flex flex-col items-center">
+          <div className="w-full flex flex-col items-center">
             <label>Mot de Passe :</label>
             <input
-              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handlePwd}
               value={pwd}
               type="password"
               name="pwd"
             />
           </div>
-          <div className="flex flex-col items-center">
+          <div className="w-full flex flex-col items-center">
             <input
-              className="w-48 ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleConfirmPwd}
               value={confirmPwd}
               type="password"
               name="confirmPwd"
             />
           </div>
-          <div className="flex flex-col items-center">
+          <div className="w-full flex flex-col items-center">
             <label>Date de Naissance :</label>
             <input
-              className="ml-2 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
+              className="my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handleBirthday}
               value={birthday}
               type="date"
               name="birthday"
             />
           </div>
-          <div className="flex flex-col items-center">
+          <div className="w-full flex flex-col items-center">
             <label>Genre :</label>
             <select
-              className="ml-2 my-1 bg-white border rounded-sm focus:outline-none focus:border-primary p-1"
+              className="my-1 bg-white border rounded-sm focus:outline-none focus:border-primary p-1"
               name="gender"
               onChange={handleGender}
               value={gender}
@@ -196,7 +194,7 @@ export default function SignupForm() {
           <button
             onClick={handleSubmit}
             type="submit"
-            className="m-4 bg-primary rounded-xl border px-3 py-1.5 text-white"
+            className="w-11/12 my-4 bg-primary rounded-xl border px-3 py-1.5 text-white"
           >
             Créer un Compte
           </button>
