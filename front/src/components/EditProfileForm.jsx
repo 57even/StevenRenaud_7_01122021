@@ -136,6 +136,7 @@ export default function EditProfileForm() {
           setSubmitted(true);
           setError(false);
           navigate(`/profile/${profileId}`);
+          window.location.reload();
         } catch (error) {
           console.log(error);
         }

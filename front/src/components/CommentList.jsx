@@ -30,6 +30,14 @@ export default function CommentList({ formatter, commentCount, isAuth }) {
     createCommentCard = "";
   }
 
+  if (comments.length == 0) {
+    return (
+      <section className="max-w-3xl w-full flex flex-col items-center -mt-5 mb-2">
+        {createCommentCard}
+      </section>
+    );
+  }
+
   return (
     <section className="max-w-3xl w-full flex flex-col items-center -mt-5 mb-2">
       <div className="w-full flex flex-col items-center gap-2.5 rounded-md border bg-white">
