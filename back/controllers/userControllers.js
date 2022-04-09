@@ -4,6 +4,7 @@ const {
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const fs = require("fs");
 
 exports.authCheck = async (req, res, next) => {
   try {
@@ -53,7 +54,6 @@ exports.modifyUser = async (req, res, next) => {
       avatar = `${req.protocol}://${req.get("host")}/images/avatars/${
         req.file.filename
       }`;
-      console.log(avatar);
     } else {
       avatar = req.body.avatar;
     }
@@ -70,6 +70,14 @@ exports.modifyUser = async (req, res, next) => {
         birthday,
         gender
       );
+
+      if (req.file) {
+        const oldAvatar = user[0].avatar;
+        const filename = oldAvatar.split("/avatars/")[1];
+        if (filename !== "profile_pic.png") {
+          fs.unlinkSync(`public/images/avatars/${filename}`);
+        }
+      }
     }
 
     res.status(201).json({ message: "Utilisateur modifié avec succès" });
@@ -118,7 +126,7 @@ exports.login = async (req, res, next) => {
     let email = req.body.email;
     let [user, _] = await User.findOne(email);
     if (user.length == 0) {
-      return res.status(401).json({ error: "User not found!" });
+      return res.status(401).json({ error: "Utilisateur introuvable !" });
     }
 
     if (await bcrypt.compare(req.body.pwd, user[0].pwd)) {
@@ -147,9 +155,10 @@ exports.deleteUser = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, "secret_key_109571533518");
     const tokenUserId = decodedToken.userId;
+    const isAdmin = decodedToken.isAdmin;
     let userId = req.params.id;
 
-    if (userId !== tokenUserId) {
+    if (userId != tokenUserId && isAdmin != 1) {
       return res.status(401).json({ error: "User not authorized !" });
     }
 

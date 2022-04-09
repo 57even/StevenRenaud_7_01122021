@@ -5,7 +5,6 @@ import axios from "axios";
 
 export default function PostCardList({ formatter, searchFilter, isAuth }) {
   const [posts, setPosts] = useState([]);
-  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -17,16 +16,11 @@ export default function PostCardList({ formatter, searchFilter, isAuth }) {
           res = await axios.get("http://localhost:3000/");
         }
         setPosts(res.data.posts);
-        setLoading(false);
       } catch (error) {
         console.error(error);
       }
     })();
   }, [searchFilter]);
-
-  if (isLoading) {
-    return <>Loading...</>;
-  }
 
   let createPostCard;
   if (isAuth) {

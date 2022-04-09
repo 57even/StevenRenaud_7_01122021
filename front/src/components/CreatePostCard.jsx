@@ -29,19 +29,20 @@ export default function CreatePostCard() {
   const handleImage = (e) => {
     let file = e.target.files[0];
     const img = new Image();
-    img.src = URL.createObjectURL(file);
+    const imageUrl = URL.createObjectURL(file);
+    img.src = imageUrl;
     img.onload = function () {
       if (this.width > 1920 || this.height > 1920 || file.size > 5000000) {
         alert("Maximum 1920x1920 et 5mb");
+      } else if (
+        !file.name.endsWith(".jpg") &&
+        !file.name.endsWith(".png") &&
+        !file.name.endsWith(".jpeg")
+      ) {
+        alert("Format non supporté");
       } else {
         setImage(file);
-        setImgPreview(
-          <img
-            src={URL.createObjectURL(file)}
-            alt="preview"
-            className="mb-1.5"
-          />
-        );
+        setImgPreview(<img src={imageUrl} alt="preview" className="mb-1.5" />);
 
         setSubmitted(false);
       }
@@ -153,10 +154,9 @@ export default function CreatePostCard() {
           />
         </div>
         {imgPreview}
-        <div className="flex w-full mb-2">
+        <div className="flex flex-wrap gap-1.5 w-full mb-2">
           Image (optionnel) :
           <input
-            className="flex ml-1.5"
             type="file"
             id="image"
             name="image"

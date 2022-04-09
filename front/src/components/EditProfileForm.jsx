@@ -5,6 +5,14 @@ import { useNavigate } from "react-router-dom";
 import "./EditProfileForm.css";
 
 export default function EditProfileForm() {
+  let token;
+  let userId;
+  let isAdmin;
+  if (JSON.parse(localStorage.getItem("token"))) {
+    token = JSON.parse(localStorage.getItem("token")).token;
+    userId = JSON.parse(localStorage.getItem("token")).userId;
+    isAdmin = JSON.parse(localStorage.getItem("token")).isAdmin;
+  }
   const navigate = useNavigate();
   const { profileId } = useParams();
   const [avatar, setAvatar] = useState("");
@@ -24,13 +32,20 @@ export default function EditProfileForm() {
   const handleAvatar = (e) => {
     let file = e.target.files[0];
     const img = new Image();
-    img.src = URL.createObjectURL(file);
+    const imageUrl = URL.createObjectURL(file);
+    img.src = imageUrl;
     img.onload = function () {
       if (this.width > 512 || this.height > 512 || file.size > 500000) {
         alert("Maximum 512x512 et 500kb");
+      } else if (
+        !file.name.endsWith(".jpg") &&
+        !file.name.endsWith(".png") &&
+        !file.name.endsWith(".jpeg")
+      ) {
+        alert("Format non supporté");
       } else {
         setAvatar(file);
-        setAvatarPreview(URL.createObjectURL(file));
+        setAvatarPreview(imageUrl);
 
         setSubmitted(false);
       }
@@ -98,7 +113,6 @@ export default function EditProfileForm() {
             newPwd = newPassword;
           }
 
-          let token = JSON.parse(localStorage.getItem("token")).token;
           let formData = new FormData();
           formData.append("avatar", avatar);
           formData.append("firstName", firstName);
@@ -130,7 +144,6 @@ export default function EditProfileForm() {
   };
 
   const handleDelete = async () => {
-    let token = JSON.parse(localStorage.getItem("token")).token;
     if (avatar !== "http://localhost:3000/images/avatars/profile_pic.png") {
       await axios.delete(`http://localhost:3000/users/${profileId}`, {
         data: { avatar },
@@ -144,6 +157,7 @@ export default function EditProfileForm() {
     }
 
     navigate("/");
+    window.location.reload();
   };
 
   // Showing success message
@@ -175,7 +189,7 @@ export default function EditProfileForm() {
   };
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("token")).userId != profileId) {
+    if (JSON.parse(userId != profileId && isAdmin != 1)) {
       navigate(`/profile/${profileId}`);
     }
 
@@ -193,7 +207,7 @@ export default function EditProfileForm() {
       .catch((err) => {
         console.log(err);
       });
-  }, [profileId, navigate]);
+  }, [profileId, navigate, isAdmin, userId]);
 
   return (
     <main className="flex flex-col items-center py-14">
@@ -222,8 +236,6 @@ export default function EditProfileForm() {
               onChange={handleFirstName}
               value={firstName}
               required
-              minLength="4"
-              maxLength="8"
               size="10"
             />
           </div>
@@ -237,8 +249,6 @@ export default function EditProfileForm() {
               onChange={handleLastName}
               value={lastName}
               required
-              minLength="4"
-              maxLength="8"
               size="10"
             />
           </div>
@@ -252,8 +262,6 @@ export default function EditProfileForm() {
               onChange={handleEmail}
               value={email}
               required
-              minLength="4"
-              maxLength="8"
               size="10"
             />
           </div>
@@ -267,8 +275,6 @@ export default function EditProfileForm() {
               onChange={handlePassword}
               value={password}
               required
-              minLength="4"
-              maxLength="8"
               size="10"
             />
           </div>
@@ -282,8 +288,6 @@ export default function EditProfileForm() {
               onChange={handleNewPassword}
               value={newPassword}
               required
-              minLength="4"
-              maxLength="8"
               size="10"
             />
           </div>
@@ -296,8 +300,6 @@ export default function EditProfileForm() {
               onChange={handleNewPasswordConfirmation}
               value={newPasswordConfirmation}
               required
-              minLength="4"
-              maxLength="8"
               size="10"
             />
           </div>
@@ -311,8 +313,6 @@ export default function EditProfileForm() {
               onChange={handleBirthday}
               value={birthday}
               required
-              minLength="4"
-              maxLength="8"
               size="10"
             />
           </div>

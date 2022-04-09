@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function LoginForm() {
+export default function LoginForm({ isAuth }) {
   const navigate = useNavigate();
+  if (isAuth == 1) {
+    navigate("/");
+  }
+
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
 
@@ -35,7 +39,7 @@ export default function LoginForm() {
 
         setSubmitted(true);
         setError(false);
-        navigate("/");
+        window.location.reload();
       })();
     }
   };

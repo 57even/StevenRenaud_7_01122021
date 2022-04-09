@@ -3,8 +3,10 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const helmet = require("helmet");
 
 // Middleware
+app.use(helmet());
 app.use(express.json());
 app.use(express.static("public"));
 app.use(cors());

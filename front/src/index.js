@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./routes/Home";
@@ -10,32 +11,61 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import frenchStrings from "react-timeago/lib/language-strings/fr";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
-
-const formatter = buildFormatter(frenchStrings);
+import TopBar from "./components/TopBar";
 
 const rootElement = document.getElementById("root");
+const formatter = buildFormatter(frenchStrings);
+
+const App = () => {
+  let [searchFilter, setSearchFilter] = useState("");
+  let [isAuth, setIsAuth] = useState(false);
+  return (
+    <>
+      <TopBar
+        setSearchFilter={setSearchFilter}
+        isAuth={isAuth}
+        setIsAuth={setIsAuth}
+      />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              formatter={formatter}
+              searchFilter={searchFilter}
+              isAuth={isAuth}
+            />
+          }
+        />
+        <Route path="posts">
+          <Route
+            path=":postId"
+            element={<Thread formatter={formatter} isAuth={isAuth} />}
+          />
+        </Route>
+        <Route path="login" element={<Login isAuth={isAuth} />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="profile">
+          <Route path=":userId" element={<Profile />} />
+        </Route>
+        <Route path="profile/:profileId/edit" element={<EditProfile />} />
+        <Route
+          path="*"
+          element={
+            <main style={{ padding: "1rem" }}>
+              <p>There's nothing here!</p>
+            </main>
+          }
+        />
+      </Routes>
+    </>
+  );
+};
+
+//Render app into the root HTML DOM node
 render(
   <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home formatter={formatter} />} />
-      <Route path="posts">
-        <Route path=":postId" element={<Thread formatter={formatter} />} />
-      </Route>
-      <Route path="login" element={<Login />} />
-      <Route path="signup" element={<Signup />} />
-      <Route path="profile">
-        <Route path=":userId" element={<Profile />} />
-      </Route>
-      <Route path="profile/:profileId/edit" element={<EditProfile />} />
-      <Route
-        path="*"
-        element={
-          <main style={{ padding: "1rem" }}>
-            <p>There's nothing here!</p>
-          </main>
-        }
-      />
-    </Routes>
+    <App />
   </BrowserRouter>,
   rootElement
 );

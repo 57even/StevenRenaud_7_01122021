@@ -26,6 +26,38 @@ export default function EditPost({ post, setIsEdit }) {
     setIsEdit(false);
   };
 
+  let imageDiv = "";
+  if (post.image && post.image != "undefined") {
+    imageDiv = (
+      <div className="flex justify-center mb-2">
+        <img src={post.image} alt="ImagePost" className="max-h-675" />
+      </div>
+    );
+  }
+
+  let textDiv = "";
+  if (post.text && post.text != "undefined") {
+    console.log(post.text);
+    textDiv = (
+      <div className="flex flex-col m-2 mt-0 px-2.5 py-1 border w-full">
+        <textarea
+          rows="7"
+          className="w-full text-lg focus:outline-none placeholder-black"
+          maxLength="10000"
+          placeholder="Texte (optionnel)"
+          onChange={handleText}
+          value={text}
+          name="text"
+        />
+      </div>
+    );
+  }
+
+  let rowNum = 2;
+  if (imageDiv == "" && textDiv == "") {
+    rowNum = 4;
+  }
+
   // Handling the form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,7 +113,7 @@ export default function EditPost({ post, setIsEdit }) {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center max-w-3xl w-full">
       <form className="flex flex-col items-center rounded-b-md bg-white max-w-3xl w-full px-2 border">
         <div className="messages">
           {errorMessage()}
@@ -89,7 +121,7 @@ export default function EditPost({ post, setIsEdit }) {
         </div>
         <div className="flex m-2 px-2.5 py-1 border w-full">
           <textarea
-            rows="2"
+            rows={rowNum}
             className="w-full text-lg focus:outline-none placeholder-black font-bold"
             maxLength="300"
             placeholder="Titre"
@@ -98,17 +130,8 @@ export default function EditPost({ post, setIsEdit }) {
             name="title"
           />
         </div>
-        <div className="flex flex-col m-2 mt-0 px-2.5 py-1 border w-full">
-          <textarea
-            rows="7"
-            className="w-full text-lg focus:outline-none placeholder-black"
-            maxLength="10000"
-            placeholder="Texte (optionnel)"
-            onChange={handleText}
-            value={text}
-            name="text"
-          />
-        </div>
+        {imageDiv}
+        {textDiv}
         <div className="flex gap-1.5 w-full pl-1 pb-1.5 -mt-0.5">
           <button
             onClick={handleSubmit}

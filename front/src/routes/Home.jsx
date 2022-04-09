@@ -1,22 +1,12 @@
-import React, { useState } from "react";
-import TopBar from "../components/TopBar";
+import React from "react";
 import PostCardList from "../components/PostCardList";
 
-export default function Home({ formatter }) {
-  let [searchFilter, setSearchFilter] = useState("");
-  let [isAuth, setIsAuth] = useState(false);
+export default function Home({ formatter, searchFilter, isAuth }) {
   return (
-    <React.Fragment>
-      <TopBar
-        setSearchFilter={setSearchFilter}
-        isAuth={isAuth}
-        setIsAuth={setIsAuth}
-      />
-      <PostCardList
-        searchFilter={searchFilter}
-        formatter={formatter}
-        isAuth={isAuth}
-      />
-    </React.Fragment>
+    <PostCardList
+      searchFilter={searchFilter}
+      formatter={formatter}
+      isAuth={isAuth}
+    />
   );
 }

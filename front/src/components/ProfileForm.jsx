@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom";
 
 export default function ProfileForm() {
   let authId;
+  let isAdmin;
   if (JSON.parse(localStorage.getItem("token"))) {
     authId = JSON.parse(localStorage.getItem("token")).userId;
+    isAdmin = JSON.parse(localStorage.getItem("token")).isAdmin;
   }
   const { userId } = useParams();
   const [avatar, setAvatar] = useState("");
@@ -33,7 +35,7 @@ export default function ProfileForm() {
       });
   }, [userId]);
 
-  if (Number(authId) === Number(userId)) {
+  if (Number(authId) === Number(userId) || isAdmin == 1) {
     editHide = "";
   }
 

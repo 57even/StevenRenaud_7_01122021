@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import TopBar from "../components/TopBar";
 import FirstPost from "../components/FirstPost";
 import EditPost from "../components/EditPost";
 import CommentList from "../components/CommentList";
 import { Outlet } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
-export default function Thread({ formatter }) {
+export default function Thread({ formatter, isAuth }) {
   const [isLoading, setLoading] = useState(true);
   const [post, setPost] = useState(null);
   const { postId } = useParams();
   const [isEdit, setIsEdit] = useState(false);
-  let [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     axios
@@ -26,38 +24,38 @@ export default function Thread({ formatter }) {
       });
   }, [postId]);
 
-  if (isLoading) {
-    return <>Loading...</>;
-  }
   return (
     <React.Fragment>
-      <TopBar isAuth={isAuth} setIsAuth={setIsAuth} />
-      <main className="py-8 p-3">
-        <div className="w-max-3xl w-full mt-5 flex flex-col items-center justify-center gap-6">
-          {!isEdit ? (
-            <FirstPost
-              key={post.id}
-              post={post}
+      {!isLoading ? (
+        <main className="py-8 p-3">
+          <div className="w-max-3xl w-full mt-5 flex flex-col items-center justify-center gap-6">
+            {!isEdit ? (
+              <FirstPost
+                key={post.id}
+                post={post}
+                formatter={formatter}
+                setIsEdit={setIsEdit}
+                isAuth={isAuth}
+              />
+            ) : (
+              <EditPost
+                key={post.id}
+                post={post}
+                formatter={formatter}
+                setIsEdit={setIsEdit}
+              />
+            )}
+            <CommentList
               formatter={formatter}
-              setIsEdit={setIsEdit}
+              commentCount={post.commentCount}
               isAuth={isAuth}
             />
-          ) : (
-            <EditPost
-              key={post.id}
-              post={post}
-              formatter={formatter}
-              setIsEdit={setIsEdit}
-            />
-          )}
-          <CommentList
-            formatter={formatter}
-            commentCount={post.commentCount}
-            isAuth={isAuth}
-          />
-          <Outlet />
-        </div>
-      </main>
+            <Outlet />
+          </div>
+        </main>
+      ) : (
+        <></>
+      )}
     </React.Fragment>
   );
 }
