@@ -83,7 +83,6 @@ export default function FirstPost({ post, formatter, setIsEdit, isAuth }) {
   };
 
   const handleLike = async () => {
-    console.log(isAuth);
     if (isAuth == 1) {
       let postId = post.id;
       let likeValue = 1;
