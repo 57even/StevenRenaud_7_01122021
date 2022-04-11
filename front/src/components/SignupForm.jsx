@@ -14,6 +14,9 @@ export default function SignupForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(
+    "Au moins un des champs n'est pas rempli correctement"
+  );
 
   const handleFirstName = (e) => {
     setFirstName(e.target.value);
@@ -65,17 +68,22 @@ export default function SignupForm() {
       setError(true);
     } else {
       (async () => {
-        await axios.post("http://localhost:3000/users/signup", {
-          firstName,
-          lastName,
-          email,
-          pwd,
-          birthday,
-          gender,
-        });
-        setSubmitted(true);
-        setError(false);
-        navigate("/login");
+        try {
+          await axios.post("http://localhost:3000/users/signup", {
+            firstName,
+            lastName,
+            email,
+            pwd,
+            birthday,
+            gender,
+          });
+          setSubmitted(true);
+          setError(false);
+          navigate("/login");
+        } catch (error) {
+          setError(true);
+          setErrorMsg(error.response.data.error);
+        }
       })();
     }
   };
@@ -103,8 +111,25 @@ export default function SignupForm() {
           display: error ? "" : "none",
         }}
       >
-        <h1 className="text-center">
-          Au moins un des champs n'est pas rempli correctement
+        <h1 className="text-center">{errorMsg}</h1>
+      </div>
+    );
+  };
+
+  const errorSamePwd = () => {
+    let errorPwd = false;
+    if (confirmPwd != "" && pwd !== confirmPwd) {
+      errorPwd = true;
+    }
+    return (
+      <div
+        className="errorSamePwd"
+        style={{
+          display: errorPwd ? "" : "none",
+        }}
+      >
+        <h1 className="text-center font-light">
+          Les mot de passes de correspondent pas
         </h1>
       </div>
     );
@@ -151,6 +176,7 @@ export default function SignupForm() {
           </div>
           <div className="w-full flex flex-col items-center">
             <label>Mot de Passe :</label>
+            {errorSamePwd()}
             <input
               className="w-11/12 my-1 border rounded-sm focus:outline-none focus:border-primary px-1"
               onChange={handlePwd}

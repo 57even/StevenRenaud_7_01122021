@@ -36,12 +36,21 @@ exports.modifyUser = async (req, res, next) => {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const validPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!validEmail.test(req.body.email)) throw "Email non valide";
-    // if (!validPasswd.test(req.body.pwd))
-    //   throw "Le mot de passe doit contenir au moins 8 caractères dont 1 majuscule, une minuscule et un chiffre";
+    if (!validPasswd.test(req.body.pwd))
+      return res.status(401).json({
+        error:
+          "Le mot de passe doit contenir au moins 8 caractères dont 1 majuscule, une minuscule et un chiffre",
+      });
 
     let pwd = await bcrypt.hash(req.body.pwd, 10);
     let newPwd;
     if (req.body.newPwd && req.body.newPwd.length > 5) {
+      if (!validPasswd.test(req.body.newPwd)) {
+        return res.status(401).json({
+          error:
+            "Le mot de passe doit contenir au moins 8 caractères dont 1 majuscule, une minuscule et un chiffre",
+        });
+      }
       newPwd = await bcrypt.hash(req.body.newPwd, 10);
     } else {
       newPwd = pwd;
@@ -105,8 +114,11 @@ exports.signup = async (req, res, next) => {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const validPasswd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!validEmail.test(req.body.email)) throw "Email non valide";
-    // if (!validPasswd.test(req.body.pwd))
-    //   throw "Le mot de passe doit contenir au moins 8 caractères dont 1 majuscule, une minuscule et un chiffre";
+    if (!validPasswd.test(req.body.pwd))
+      return res.status(401).json({
+        error:
+          "Le mot de passe doit contenir au moins 8 caractères dont 1 majuscule, une minuscule et un chiffre",
+      });
 
     let pwd = await bcrypt.hash(req.body.pwd, 10);
     let { firstName, lastName, email, birthday, gender } = req.body;

@@ -13,6 +13,9 @@ export default function LoginForm({ isAuth }) {
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(
+    "Au moins un des champs n'est pas rempli correctement"
+  );
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -31,15 +34,20 @@ export default function LoginForm({ isAuth }) {
       setError(true);
     } else {
       (async () => {
-        let request = await axios.post("http://localhost:3000/users/login", {
-          email,
-          pwd,
-        });
-        localStorage.setItem("token", JSON.stringify(request.data));
+        try {
+          let request = await axios.post("http://localhost:3000/users/login", {
+            email,
+            pwd,
+          });
+          localStorage.setItem("token", JSON.stringify(request.data));
 
-        setSubmitted(true);
-        setError(false);
-        window.location.reload();
+          setSubmitted(true);
+          setError(false);
+          window.location.reload();
+        } catch (error) {
+          setError(true);
+          setErrorMsg(error.response.data.error);
+        }
       })();
     }
   };
@@ -67,7 +75,7 @@ export default function LoginForm({ isAuth }) {
           display: error ? "" : "none",
         }}
       >
-        <h1 className="text-center">Au moins un des champs est incorrect</h1>
+        <h1 className="text-center">{errorMsg}</h1>
       </div>
     );
   };

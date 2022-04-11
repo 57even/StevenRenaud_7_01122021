@@ -28,6 +28,9 @@ export default function EditProfileForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(
+    "Au moins un des champs n'est pas rempli correctement"
+  );
 
   const handleAvatar = (e) => {
     let file = e.target.files[0];
@@ -138,7 +141,7 @@ export default function EditProfileForm() {
           navigate(`/profile/${profileId}`);
           window.location.reload();
         } catch (error) {
-          console.log(error);
+          setErrorMsg(error.response.data.error);
         }
       })();
     }
@@ -184,7 +187,7 @@ export default function EditProfileForm() {
           display: error ? "" : "none",
         }}
       >
-        <h1 className="text-center">Au moins un des champs est incorrect</h1>
+        <h1 className="text-center">{errorMsg}</h1>
       </div>
     );
   };

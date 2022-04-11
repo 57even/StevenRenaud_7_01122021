@@ -43,6 +43,7 @@ export default function EditPost({ post, setIsEdit }) {
         <textarea
           rows="7"
           className="w-full text-lg focus:outline-none placeholder-black"
+          minLength="10"
           maxLength="10000"
           placeholder="Texte (optionnel)"
           onChange={handleText}
@@ -123,6 +124,7 @@ export default function EditPost({ post, setIsEdit }) {
           <textarea
             rows={rowNum}
             className="w-full text-lg focus:outline-none placeholder-black font-bold"
+            minLength="10"
             maxLength="300"
             placeholder="Titre"
             onChange={handleTitle}

@@ -8,6 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import TimeAgo from "react-timeago";
 import axios from "axios";
+import profilePic from "../icons/profile_pic.png";
 
 export default function PostCard({ post, formatter, isAuth }) {
   let token;
@@ -27,8 +28,13 @@ export default function PostCard({ post, formatter, isAuth }) {
           `http://localhost:3000/users/${post.author}`
         );
 
-        setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
-        setAuthorPic(res.data.user.avatar);
+        if (!res.data.user) {
+          setAuthorName("Deleted User");
+          setAuthorPic(profilePic);
+        } else {
+          setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
+          setAuthorPic(res.data.user.avatar);
+        }
 
         if (userId && post.likeCount + post.dislikeCount > 0) {
           const res1 = await axios.get(

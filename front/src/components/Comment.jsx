@@ -4,6 +4,7 @@ import { PencilAltIcon, XCircleIcon } from "@heroicons/react/outline";
 import TimeAgo from "react-timeago";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import profilePic from "../icons/profile_pic.png";
 
 export default function Comment({ comment, formatter }) {
   const { postId } = useParams();
@@ -39,8 +40,13 @@ export default function Comment({ comment, formatter }) {
     axios
       .get(`http://localhost:3000/users/${comment.author}`)
       .then((res) => {
-        setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
-        setAuthorPic(res.data.user.avatar);
+        if (!res.data.user) {
+          setAuthorName("Deleted User");
+          setAuthorPic(profilePic);
+        } else {
+          setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
+          setAuthorPic(res.data.user.avatar);
+        }
       })
       .catch((err) => {
         console.log(err);

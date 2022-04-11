@@ -10,6 +10,7 @@ import {
 import TimeAgo from "react-timeago";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import profilePic from "../icons/profile_pic.png";
 
 export default function FirstPost({ post, formatter, setIsEdit, isAuth }) {
   const navigate = useNavigate();
@@ -41,8 +42,13 @@ export default function FirstPost({ post, formatter, setIsEdit, isAuth }) {
         const res = await axios.get(
           `http://localhost:3000/users/${post.author}`
         );
-        setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
-        setAuthorPic(res.data.user.avatar);
+        if (!res.data.user) {
+          setAuthorName("Deleted User");
+          setAuthorPic(profilePic);
+        } else {
+          setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
+          setAuthorPic(res.data.user.avatar);
+        }
 
         if (userId && post.likeCount + post.dislikeCount > 0) {
           const res1 = await axios.get(
