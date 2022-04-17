@@ -45,7 +45,7 @@ export default function TopBarMobile({
         <img
           src={logo}
           alt="Groupomania"
-          className="object-cover h-12 max-w-1/4"
+          className="object-cover h-11 max-w-1/4"
         />
       </Link>
       <div className="p-1 flex items-center w-3/4 m-1.5 border rounded-md focus-within:border-primary focus-within:border-opacity-60 bg-gray-100">
