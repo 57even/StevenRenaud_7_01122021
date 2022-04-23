@@ -43,7 +43,7 @@ export default function FirstPost({ post, formatter, setIsEdit, isAuth }) {
           `http://localhost:3000/users/${post.author}`
         );
         if (!res.data.user) {
-          setAuthorName("Deleted User");
+          setAuthorName("Utilisateur supprimé");
           setAuthorPic(profilePic);
         } else {
           setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);

@@ -41,7 +41,7 @@ export default function Comment({ comment, formatter }) {
       .get(`http://localhost:3000/users/${comment.author}`)
       .then((res) => {
         if (!res.data.user) {
-          setAuthorName("Deleted User");
+          setAuthorName("Utilisateur supprimé");
           setAuthorPic(profilePic);
         } else {
           setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);

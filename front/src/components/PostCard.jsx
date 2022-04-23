@@ -29,7 +29,7 @@ export default function PostCard({ post, formatter, isAuth }) {
         );
 
         if (!res.data.user) {
-          setAuthorName("Deleted User");
+          setAuthorName("Utilisateur supprimé");
           setAuthorPic(profilePic);
         } else {
           setAuthorName(`${res.data.user.firstName} ${res.data.user.lastName}`);
