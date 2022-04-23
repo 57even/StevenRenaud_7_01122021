@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./routes/Home";
@@ -17,6 +17,10 @@ const rootElement = document.getElementById("root");
 const formatter = buildFormatter(frenchStrings);
 
 const App = () => {
+  useEffect(() => {
+    document.title = "Groupomania";
+  }, []);
+
   let [searchFilter, setSearchFilter] = useState("");
   let [isAuth, setIsAuth] = useState(false);
   return (
